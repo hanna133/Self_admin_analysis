@@ -1,0 +1,1364 @@
+\	C O C A I N E  and   F O O D  in  R A T S  and  M I C E 
+\		          version 2.24, released 07.21.16
+\  A GENERIC SOURCE PROGRAM for COCAINE and FOOD SELF-ADMINISTRATION
+\
+\ Program for mice: Some A and Y variables are different and must be changed before compilation
+\
+\		*** VARIABLES USED IN THIS PROGRAM ***
+\
+\ A – LIST for constants used in the program
+\		ANIMAL
+\ A(0) = SPECIES [default = 1 – RATS, 2 – MICE, see Ref_06_Table]
+\ A(1) = STRAIN [default = 1 – Sprague-Dawley, 52 – Swiss, see Ref_07_Table]
+\ A(2) = SOURCE or POPULATION [default = 1 – Harlan, 2 – Charles River, see Ref_08_Table]
+\ A(3) = ANIMAL NUMBER [default = 0, then equals the identifier “Subjectnumber"]
+\ A(4) = DATE OF THE EXPERIMENT [default = 0]
+\ A(5) = ANIMAL AGE [default = 0]
+\ A(6) = BODY WEIGHT [default = 1 g, then equals the identifier “Expnumber" or W*1000]
+\		DRUGS
+\ A(7) = CODE for SELF-ADMINISTERED DRUG 1 [default = 1 for cocaine, see Ref_11_Table]
+\ A(8) = ROUTE of SELF-ADMIN [default = 1, then equals identifier “Groupnumber", seeRef_12_Table]
+\ A(9) = CODE for a TEST DRUG 2 [default = 0, see Ref_11_Table]
+\ A(10) = ROUTE of a TEST DRUG 2 ADMINISTRATION [default = 0, see Ref_12_Table]
+\ A(11) = DOSE of an INJECTED TEST DRUG 2 [default = 0 nmoles/kg]
+\ A(12) = VOLUME of a TEST COMPOUND/VEHICLE INJECTION [default = 0 microliter/kg]
+\		ENVIRONMENT
+\ A(13) = ROOM and EXP. BOX [default = 200 for UC2, boxes 1-6; def = 206 for boxes 7-12 and so on]
+\ A(14) = ABSOLUTE TIME of the BEGINNING of the SESSION [default = 0 sec after midnight]
+\ A(15) = TIME TO START LIGHT-DARK CYCLE [default = 64800 sec after midnight (6 p.m.)]
+\ A(16) = LENGTH of the LIGHT PHASE [default = 43200 sec (12 hr)]
+\ A(17) = LENGTH of the DARK PHASE [default = 43200 sec (12 hr)]
+\ A(18) = ABSOLUTE TIME of the END of the SESSION [default = 0 sec after midnight]
+\ A(19) = TEMPERATURE [default = 0 degrees of Celsius]
+\ A(20) = RELATIVE HUMIDITY [default = 0%]
+\ A(21) = ATMOSPHERIC PRESSURE [default = 0 hectopascal/millibars]
+\ A(22) = NOISE [default = 45 db, 39 db in the room]
+\ A(23) = ILLUMINATION [default = 66 lux]
+\ A(24) = CUES [default = 0, see Ref_13_Table]
+\		INJECTION, INFUSION AND DRUGS
+\ A(25) = RATE of the INJECTION [default = 0, after START A(25)=Y(39)*Y(41)*Y(43)/1000 micloliter/sec]
+\ A(26) = RATE of the INFUSION [default = 0 nl/sec]
+\ A(27) = reserved2 [default = 0]
+\ A(28) = CONCENTRATION of INJECTED DRUG 1 [default = 40 nmol/microliter = 13.6 mg/ml]
+\ A(29) = CONCENTRATION of INFUSED DRUG [default = 0 nmol/microliter]
+\ A(30) = CODE OF INFUSED DRUG 3 [default = 0, see Ref_11_Table]
+\ A(31) = ROUTE OF INFUSION [default = 0, see Ref_12_Table]
+\ A(32) = SIZE OF FOOD PELLET OR LIQUID DROP [default = 45 mg]
+\		TIME AND LEVEL
+\ A(33) = SLOPE of TIME_OUT in equation: M=A(33)*L+A(34)*100 [default = 1]
+\ A(34) = EXTRA TIME OUT or MINIMAL TIME OUT [default = 5 sec, see equation above]
+\ A(35) = SLOPE of INTERVAL in equation: Y(3)=A(35)*Y(5)+A(36) [default = 0.4]
+\ A(36) = EXTRA INTERVAL or MINIMAL INTERVAL [default = 600 sec, see equation above]
+\ A(37) = SLOPE of PROJECTED PRIMING LEVEL ESCALATION [default = linear 0.5 nmol/kg/sec]
+\ A(38) = EXTRA INITIAL LEVEL SET TO START PRIMING WITH [default = 0 nmol/kg]
+\ A(39) = INTERVAL BETWEEN ESCALATING OR FIXED PRIMING DOSES [default = 60 sec]
+\ A(40) = MAXIMAL DRUG LEVEL OF INCONTINGENT INJECTIONS [default = 1.1 fold of satiety]
+\ A(41) = INTERVAL BETWEEN TEST COMPOUND and BEGINNING of PRIMING [default = 3 min]
+\ A(42) = SLOPE of PROGRESSIVE schedules: RATIO [0.0], TIME OUT [0.0] or INTERVAL [=0.0]
+\
+\		CRITERIA
+\ A(43) = EXTINCTION-I (maximal inter-response interval) [default = 30 min then REAL =V(2)]
+\ A(44) = REINSTATEMENT REQUIREMENT 1 (minimal) [default = 5]
+\ A(45) = REINSTATEMENT REQUIREMENT 2 (maximal) [default = 15]
+\ A(46) = LETHAL LEVEL of the DRUG [default = 20,000 nmol/kg then REAL =U(16)]
+\ A(47) = SATIETY THRESHOLD [default = 6,000 nmol/kg then REAL =U(12)]
+\ A(48) = MAXIMAL INTER-PRESS INTERVAL WITHIN COMPULSION ZONE [default = 60 sec]
+\ A(49) = EXTINCTION-II (minimal inter-response interval) [default = 30 min then REAL =V(17)]
+\
+\                                   SUMMARY
+\ A(50) = CODE FOR SESSION DESIGN [default = 0, see Ref_01_Table]
+\ A(51) = NOTE - CODE for ERRORS [default = 0, see Ref_14_Table]
+\ A(52) = EXTINCTION-I RESPONSES (Total number of active responses) [default = 0]
+\ A(53) = PRIMING DOSE [default = 0 nmol/kg]
+\ A(54) = PRIMING THRESHOLD ((Penultimate + Ultimate)/2) [default = 0 nmol/kg]
+\ A(55) = LOADING DOSE (Ultimate priming dose) [default = 1 pellet/drop]
+\ A(56) = MAINTENANCE DOSE [default = 1 pellet/drop]
+\ A(57) = BREAKPOINT during PROGRESSIVE RATIO (Complete ratio) [default = 0]
+\ A(58) = EXTINCTION-II RESPONSES (Total number of active responses) [default = 0]
+\ A(59) = CODE for the NAME of the EXPERIMENTER [default = 0, see Ref_15_Table]
+\
+\ B = ARRAY for SA drug 1 LEVEL in the BRAIN compartment [X dimension]
+\ C = ARRAY for SA drug 1 LEVEL in the CENTRAL compartment [X dimension]
+\ D = ARRAY for SA drug 1 LEVEL in the PERIPHERAL compartment [X dimension]
+\ E = ARRAY for a CODE of every EVENT [X dimension]
+\ F = FIXED RATIO [default = 1]
+\ G = LIST OF RANDOM RATIOS [Y(56) dimension]
+\ H = LIST OF RANDOM TIME OUTS [Y(57) dimension]
+\ I = LIST OF RANDOM INTERVALS [Y(58) dimension]
+\ J = LIST of NUMBER of INJECTIONS at this dose of progressive schedule [Y(55) dimension]
+\ K = ARRAY for absolute time of any K signals [Y(54) dimension]
+\ L = DURATION OF THE LAST PUMPING L=Y(5)*W/A(28)/A(25) [resolution: 0.01 sec]
+\ M = DURATION OF THE LAST TIME OUT PERIOD [resolution: 0.01 sec]
+\ N = PRESET NUMBER OF INJECTIONS at THIS DOSE
+\ O = LIST of PROGRESSIVE and RANDOM DOSES [Y(55) dimension]
+\ P = PRIMING / LOADING / MAINTENANCE DOSE [default = 1500 nmol/kg]
+\ Q = MAXIMAL DURATION OF THE SESSION [default 1440 min = 24 hours]
+\ R = ARRAY for SUMMARY of the INPUT ACTIVITY
+\ S = ARRAY for SUMMARY of the OUTPUT ACTIVITY
+\ T = ARRAY for ABSOLUTE TIME of EVERY EVENT [X dimension]
+\ U = ARRAY for SUMMARY of the AMOUNT OF REINFORCEMENTS
+\ V = ARRAY for SUMMARY of the TIME VARIABLES
+\ W = BODY WEIGHT [(kg) = EXPNUMBER/1000 during the session and saved as (g) in the file]
+\ X = Dimension for B, C, E, and T arrays
+\ Y = LIST for temporary values used for calculations in this program
+\ Y(0) = TIME TICK [resolution 0.1 sec, Session TIME after START signal, min]        (Session TIME) - SHOW 1
+\ Y(1) = Time AFTER the last pumping began [resolution: 0.1 sec]                            (AFTER) - SHOW 2
+\ Y(2) = Time AFTER the last infusion began [resolution: 0.1 sec]                           (AFTER) - SHOW 47
+\ Y(3) = INTERVAL BETWEEN PROGRAMMED PRIMING INJECTIONS [resolution: 1.0 sec]
+\ Y(4) = Time AFTER the last active response [resolution: 0.1 sec]
+\ Y(5) = CALCULATED AND THEN TRUE LAST GIVEN DOSE [resolution: 1.0 nmol/kg]
+\ Y(6) = NUMBER OF ACTIVE LEVER PRESSES TOWARDS THE RATIO CRITERION
+\ Y(7) = NUMBER OF INJECTIONS AT THIS DOSE OR PRESSES DURING PRIMING PHASE
+\ Y(8) = DOSE OF FOOD/WATER REQUIRED
+\ Y(9) = NUMBER OF PELLETS/DROPS GIVEN AT THIS DOSE
+\ Y(10) = HALF-LIFE OF ELIMINATION OF DRUG 1:	ln2/k10	[resolution = 1sec]
+\ Y(11) = HALF-LIFE OF REDISTRIBUTION OF DRUG 1:	ln2/k21	[resolution = 1sec]
+\ Y(12) = HALF-LIFE OF DISTRIBUTION OF DRUG 1:	ln2/k12	[resolution = 1sec]
+\ Y(13) = HALF-LIFE OF DISTRIBUTION OF DRUG 1:	ln2/k13	[resolution = 1sec]
+\ Y(14) = HALF-LIFE OF REDISTRIBUTION OF DRUG 1:	ln2/k31	[resolution = 1sec]
+\ Y(15) = HALF-LIFE OF ELIMINATION OF DRUG 1:	ln2/k20	[resolution = 1sec]
+\ Y(16) = HALF-LIFE OF ELIMINATION OF DRUG 1:	ln2/k30	[resolution = 1sec]
+\ Y(17) = RATE OF INJECTION/INFUSION OF DRUG 1 	[resolution = nmol/kg/sec]
+\ Y(18) = CURRENT CUMULATIVE LEVEL OF DRUG 1 IN CENTRAL COMPARTMENT
+\ Y(19) = CURRENT CUMULATIVE LEVEL OF DRUG 1 IN BRAIN COMPARTMENT
+\ Y(20) = CURRENT CUMULATIVE LEVEL OF DRUG 1 IN PERIPHERAL COMPARTMENT
+\ Y(21) = TOTAL CURRENT CUMULATIVE LEVEL OF DRUG 1 IN ALL COMPARTMENTS
+\ Y(22) = HALF-LIFE OF ELIMINATION OF DRUG 2:	ln2/k10	[resolution = 1sec]
+\ Y(23) = HALF-LIFE OF REDISTRIBUTION OF DRUG 2:	ln2/k21	[resolution = 1sec]
+\ Y(24) = HALF-LIFE OF DISTRIBUTION OF DRUG 2:	ln2/k12	[resolution = 1sec]
+\ Y(25) = HALF-LIFE OF DISTRIBUTION OF DRUG 2:	ln2/k13	[resolution = 1sec]
+\ Y(26) = HALF-LIFE OF REDISTRIBUTION OF DRUG 2:	ln2/k31	[resolution = 1sec]
+\ Y(27) = HALF-LIFE OF ELIMINATION OF DRUG 2:	ln2/k20	[resolution = 1sec]
+\ Y(28) = HALF-LIFE OF ELIMINATION OF DRUG 2:	ln2/k30	[resolution = 1sec]
+\ Y(29) = RATE OF INJECTION/INFUSION OF DRUG 2	[resolution = nmol/kg/sec]
+\ Y(30) = CURRENT CUMULATIVE LEVEL OF DRUG 2 IN CENTRAL COMPARTMENT
+\ Y(31) = CURRENT CUMULATIVE LEVEL OF DRUG 2 IN BRAIN COMPARTMENT
+\ Y(32) = CURRENT CUMULATIVE LEVEL OF DRUG 2 IN PERIPHERAL COMPARTMENT
+\ Y(33) = TOTAL CURRENT CUMMULATIVE LEVEL OF DRUG 2 IN ALL COMPARTMENTS
+\ Y(34) = BOOLEAN MARK OF THE CURRENT INFUSION STATUS OFF=0/ON=1	[default = 0]
+\ Y(35) = WEIGHT of the CATHETER 1		[default = 1 g]
+\ Y(36) = WEIGHT of the CATHETER 2		[default = 0 g]
+\ Y(37) = DEAD VOLUME of the CATHETER 1		[default = 32 microliters]
+\ Y(38) = DEAD VOLUME of the CATHETER 2		[default = 0 microliters]
+\ Y(39) = MOTOR SPEED of the INJECTION PUMP 	[default = 1 rpm]
+\ Y(40) = DIAL of the INFUSION PUMP 		[default = 0]
+\ Y(41) = BASIC VELOCITY of the INJECTION PUMP with 1 ml syringe [default = 545 nl/s]
+\ Y(42) = BASIC VELOCITY of the INFUSION PUMP with 1 ml syringe [default = 0 nl/s]
+\ Y(43) = VOLUME of the GASTIGHT HAMILTON SYRINGE in INJECTION PUMP [default = 5 ml]
+\ Y(44) = VOLUME of the GASTIGHT HAMILTON SYRINGE in INFUSION PUMP [default = 0 ml]
+\ Y(45) = DURATION OF TRANSITION PHASE OR THE CURRENT MAINTENANCE UNIT DOSE
+\ Y(46) = DURATION of the LAST PUMPING [resolution: 0.01 sec]                       (PUMPNG) - SHOW 11
+\ Y(47) = DURATION of the LAST TIME OUT Period [resolution: 0.01 sec]             (TIME_OUT) - SHOW 12
+\ Y(48) = DURATION of the LAST SIGNAL [resolution: 0.01 sec]
+\ Y(49) = TOTAL DURATION of PUMPING [resolution: 0.01 sec]
+\ Y(50) = TOTAL DURATION of SIGNALING [resolution: 0.01 sec]
+\ Y(51) = EXPECTED DURATION OF TRANSITION STAGE [resolution: 1 sec]]
+\ Y(52) = SESSION TIME TO TURN HOUSE LIGHTS OFF or ON [resolution: 1 sec]
+\ Y(53) = SESSION TIME WHEN EXTINCTION II STARTED [resolution: 1 sec]
+\ Y(54) = Dimension for K array
+\ Y(55) = Dimension for O and J arrays (the dOse and the number of inJections)
+\ Y(56) = Dimension for G array
+\ Y(57) = Dimension for H array
+\ Y(58) = Dimension for I array
+\ Y(59) = CURRENT PHASE OF THE EXPERIMENT
+\
+\ Z = LIST for a number of elements in each variable
+\
+\		*** SUMMARY OF THE SESSION ***
+\ R - ARRAY for cumulative number of lever presses
+\		EXTINCTION OF SPONTANEOUS ACTIVITY
+\ R(0) = ACTIVE LEVER Presses during TIME ON (EXTINCTION-I)                      (AON_I) - SHOW 21
+\ R(1) = ACTIVE LEVER Presses during TIME OUT (EXTINCTION-I)                     (AOF_I) - SHOW 22
+\ R(2) = INACT. LEVER Presses during TIME ON (EXTINCTION-I)                      (ION_I) - SHOW 23
+\ R(3) = INACT. LEVER Presses during TIME OUT (EXTINCTION-I)                     (IOF_I) - SHOW 24
+\ R(4) = ACTIVE NOSE Pokes during TIME ON (EXTINCTION-I)                         (AON_I) - SHOW 21
+\ R(5) = ACTIVE NOSE Pokes during TIME OUT (EXTINCTION-I)                        (AOF_I) - SHOW 22
+\ R(6) = INACT. NOSE Pokes during TIME ON (EXTINCTION-I)                         (ION_I) - SHOW 23
+\ R(7) = INACT. NOSE Pokes during TIME OUT (EXTINCTION-I)                        (IOF_I) - SHOW 24
+\ R(8) = ACTIVE LEVER+POKES during filling the dead space of the catheter        (AOF_T) - SHOW 27
+\ R(9) = INACT. LEVER+POKES during filling the dead space of the catheter        (IOF_T) - SHOW 29
+\	REINSTATEMENT OF SELF-ADMINISTRATION AND LOADING
+\ R(10) = ACTIVE LEVER Presses during TIME ON (REINSTATEMENT)                    (AON_R) - SHOW 31
+\ R(11) = ACTIVE LEVER Presses during TIME OUT (REINSTATEMENT)                   (AOF_R) - SHOW 32
+\ R(12) = INACT. LEVER Presses during TIME ON (REINSTATEMENT)                    (ION_R) - SHOW 33
+\ R(13) = INACT. LEVER Presses during TIME OUT (REINSTATEMENT)                   (IOF_R) - SHOW 34
+\ R(14) = ACTIVE NOSE Pokes during TIME ON (REINSTATEMENT)                       (AON_R) - SHOW 31
+\ R(15) = ACTIVE NOSE Pokes during TIME OUT (REINSTATEMENT)                      (AOF_R) - SHOW 32
+\ R(16) = INACT. NOSE Pokes during TIME ON (REINSTATEMENT)                       (ION_R) - SHOW 33
+\ R(17) = INACT. NOSE Pokes during TIME OUT (REINSTATEMENT)                      (IOF_R) - SHOW 34
+\ R(18) = Reserved
+\ R(19) = PROJECTED LEVEL AND THEN CALCULATED DOSE TO REACH IT
+\		MAINTENANCE OF SELF-ADMINISTRATION
+\ R(20) = ACTIVE LEVER Presses during TIME ON (MAINTENANCE)                      (AON_M) - SHOW 36
+\ R(21) = ACTIVE LEVER Presses during TIME OUT (MAINTENANCE)                     (AOF_M) - SHOW 37
+\ R(22) = INACT. LEVER Presses during TIME ON (MAINTENANCE)                      (ION_M) - SHOW 38
+\ R(23) = INACT. LEVER Presses during TIME OUT (MAINTENANCE)                     (IOF_M) - SHOW 39
+\ R(24) = ACTIVE NOSE Pokes during TIME ON (MAINTENANCE)                         (AON_M) - SHOW 36
+\ R(25) = ACTIVE NOSE Pokes during TIME OUT (MAINTENANCE)                        (AOF_M) - SHOW 37
+\ R(26) = INACT. NOSE Pokes during TIME ON (MAINTENANCE)                         (ION_M) - SHOW 38
+\ R(27) = INACT. NOSE Pokes during TIME OUT (MAINTENANCE)                        (IOF_M) - SHOW 39
+\ R(28) = HIGHEST RATIO COMPLETE during PROGRESSIVE RATIO
+\ R(29) = EXPECTED DRUG LEVEL AFTER INJECTION OF THE NEXT DOSE
+\		EXTINCTION OF DRUG-INDUCED ACTIVITY
+\ R(30) = ACTIVE LEVER Presses during TIME ON (EXTINCTION-II)                    (AON_E) - SHOW 41
+\ R(31) = ACTIVE LEVER Presses during TIME OUT (EXTINCTION-II)                   (AOF_E) - SHOW 42
+\ R(32) = INACT. LEVER Presses during TIME ON (EXTINCTION-II)                    (ION_E) - SHOW 43
+\ R(33) = INACT. LEVER Presses during TIME OUT (EXTINCTION-II)                   (IOF_E) - SHOW 44
+\ R(34) = ACTIVE NOSE Pokes during TIME ON (EXTINCTION-II)                       (AON_E) - SHOW 41
+\ R(35) = ACTIVE NOSE Pokes during TIME OUT (EXTINCTION-II)                      (AOF_E) - SHOW 42
+\ R(36) = INACT. NOSE Pokes during TIME ON (EXTINCTION-II)                       (ION_E) - SHOW 43
+\ R(37) = INACT. NOSE Pokes during TIME OUT (EXTINCTION-II)                      (IOF_E) - SHOW 44
+\ R(38) = reserved
+\ R(39) = reserved
+\
+\ S - ARRAY variable for a number of reinforcements
+\		EXTINCTION OF SPONTANEOUS ACTIVITY
+\ S(0) = EARNED SHAM REINFORCEMENT during EXTINCTION-I (Z9)                     (EARN_I) - SHOW 25
+\ S(1) = PROGRAMMED REINFORCEMENT during EXTINCTION-I (Z8)                      (PROG_I) - SHOW 9
+\ S(2) = PROGRAMMED REINFORCEMENTS toward THE CRITERION                           (SHAM) - SHOW 4
+\ S(3) = REINFORCEMENT GIVEN during EXTINCTION-I (K1)                           (K1SHAM) - SHOW 4
+\ S(4) = reserved
+\ S(5) = reserved
+\ S(6) = reserved
+\ S(7) = reserved
+\ S(8) = TOTAL PRESSES during TRANSITION STAGE                                  (PRES_T) - SHOW 30
+\ S(9) = PROGRAMMED during TRANSITION STAGE (Z8)                                  (FILL) - SHOW 9
+\	REINSTATEMENT OF SELF-ADMINISTRATION AND LOADING
+\ S(10) = EARNED TRUE REINFORCEMENT during REINSTATEMENT (Z9)                   (EARN_R) - SHOW 35
+\ S(11) = PROGRAMMED REINFORCEMENT during REINSTATEMENT (Z8)                    (PROG_R) - SHOW 9
+\ S(12) = REINFORCEMENT GIVEN during REINSTATEMENT (K1)                             (K1) - SHOW 4
+\ S(13) = SUICIDAL ATTEMPT during REINSTATEMENT (Z20)                           (SUICID) - SHOW 4
+\ S(14) = reserved
+\ S(15) = reserved
+\ S(16) = reserved
+\ S(17) = reserved
+\ S(18) = reserved
+\ S(19) = reserved
+\		MAINTENANCE OF SELF-ADMINISTRATION
+\ S(20) = EARNED TRUE REINFORCEMENT during MAINTENANCE (Z9)                     (EARN_M) - SHOW 40
+\ S(21) = PROGRAMMED REINFORCEMENT during MAINTENANCE (Z8)                      (PROG_M) - SHOW 9
+\ S(22) = REINFORCEMENT GIVEN during MAINTENANCE (K1)                               (K1) - SHOW 4
+\ S(23) = SUICIDAL ATTEMPT during MAINTENANCE (Z20)                             (SUICID) - SHOW 4
+\ S(24) = reserved
+\ S(25) = reserved
+\ S(26) = reserved
+\ S(27) = reserved
+\ S(28) = reserved
+\ S(29) = reserved
+\		EXTINCTION OF DRUG-INDUCED ACTIVITY
+\ S(30) = EARNED SHAM REINFORCEMENT during EXTINCTION-II (Z9)                   (PRES_E) - SHOW 45
+\ S(31) = PROGRAMMED REINFORCEMENT during EXTINCTION-II (Z8)                    (PROG_E) - SHOW 9
+\ S(32) = REINFORCEMENT GIVEN during EXTINCTION-II (K1)                         (K1_PRM) - SHOW 4
+\ S(33) = reserved
+\ S(34) = reserved
+\ S(35) = reserved
+\ S(36) = reserved
+\ S(37) = reserved
+\ S(38) = reserved
+\ S(39) = reserved
+\
+\ U - ARRAY for dosing and levels (nmol/kg)
+\		REINSTATEMENT OF SELF-ADMINISTRATION
+\ U(0) = VERY FIRST PRIMING DOSE
+\ U(1) = PENULTIMATE PRIMING DOSE
+\ U(2) = ULTIMATE PRIMING DOSE
+\ U(3) = PENULTIMATE TOTAL CUMULATIVE LEVEL
+\ U(4) = ULTIMATE TOTAL CUMULATIVE LEVEL	                                (PR_THR) - SHOW 15
+\ U(5) = TOTAL CUMULATIVE DOSE before REINSTATEMENT                              (CUM_D) - SHOW 18
+\		LOADING
+\ U(6) = TOTAL CUMULATIVE DOSE before MAINTENANCE                                (CUM_D) - SHOW 18
+\ U(7) = TOTAL CUMULATIVE AMOUNT OF FOOD or FLUID
+\ U(8) = reserved
+\		MAINTENANCE OF SELF-ADMINISTRATION
+\ U(9)   = DOSING RATE of the INJECTION [resolution = nmol/kg/sec]
+\ U(10) = DOSING RATE of the INFUSION [resolution = nmol/kg/sec]
+\ U(11) = TOTAL CUMULATIVE DOSE during MAINTENANCE [resolution = nmol/kg]
+\ U(12) = LOWEST DRUG LEVEL during MAINTENANCE [resolution = nmol/kg]
+\ U(13) = HIGHEST DOSE GIVEN during MAINTENANCE [resolution = nmol/kg]
+\ U(14) = HIGHEST DRUG LEVEL during MAINTENANCE [resolution = nmol/kg]
+\	SESSION and EXTINCTION OF CUE- AND DRUG-INDUCED ACTIVITY
+\ U(15) = TOTAL CUMULATIVE DOSE during the SESSION                               (CUM_D) – SHOW 18
+\ U(16) = HIGHEST DRUG LEVEL REACHED during THE SESSION
+\ U(17) = HIGHEST DOSE GIVEN during the SESSION
+\ U(18) = reserved
+\ U(19) = DRUG LEVEL at LAST RESPONSE = EXTINCTION THRESHOLD                    (EX_THR) - SHOW – 4
+\
+\ V - ARRAY variable for timing (sec)
+\		EXTINCTION OF CUE-INDUCED ACTIVITY
+\ V(0) = ABSOLUTE TIME of the FIRST ACTIVE RESPONSE during EXTINCTION-I
+\ V(1) = ABSOLUTE TIME of the FIRST INACTIVE RESPONSE during EXTINCTION-I
+\ V(2) = LONGEST INTER-RESPONSE INTERVAL during EXTINCTION-I
+\ V(3) = ABSOLUTE TIME of the LAST ACTIVE RESPONSE during EXTINCTION-I
+\ V(4) = ABSOLUTE TIME of the LAST INACTIVE RESPONSE during EXTINCTION-I
+\		REINSTATEMENT OF SELF-ADMINISTRATION
+\ V(5) = ABSOLUTE TIME of filling the dead space of the catheter
+\ V(6) = ABSOLUTE TIME of the BEGINNING OF REINSTATEMENT STAGE (Z14 signal)
+\ V(7) = ABSOLUTE TIME of the PENULTIMATE PRIMING INJECTION
+\ V(8) = ABSOLUTE TIME of the ULTIMATE PRIMING INJECTION
+\ V(9) = ABSOLUTE TIME of the FIRST ACTIVE LEVER PRESS
+\		MAINTENANCE OF SELF-ADMINISTRATION
+\ V(10) = ABSOLUTE TIME of the FIRST EARNED SHAM INJECTION
+\ V(11) = ABSOLUTE TIME of the FIRST SELF-ADMINISTRATION
+\ V(12) = reserved
+\ V(13) = LONGEST TIME OUT PERIOD COMPLETE during PROGRESSIVE TIME OUT
+\ V(14) = LONGEST INTERVAL COMPLETE during PROGRESSIVE INTERVAL
+\		EXTINCTION OF DRUG-INDUCED ACTIVITY
+\ V(15) = ABSOLUTE TIME of the FIRST ACTIVE RESPONSE during EXTINCTION-II
+\ V(16) = ABSOLUTE TIME of the FIRST INACTIVE RESPONSE during EXTINCTION-II
+\ V(17) = LONGEST INTER-RESPONSE INTERVAL during EXTINCTION-II
+\ V(18) = ABSOLUTE TIME of the LAST ACTIVE RESPONSE during EXTINCTION-II
+\ V(19) = ABSOLUTE TIME of the LAST INACTIVE RESPONSE during EXTINCTION-II
+\
+\	KEYBOARD SIGNALS CONTROLLING EXPERIEMNTAL DEVICES
+\ K1 = Give an injection without signal from the keyboard
+\ K2 = Start and stop constant infusion (same as Z6)
+\ K3 = Give one pellet of food
+\ K4 = Give one drop of fluid
+\ K5 = Positive reinforcer (for example, ICSS)
+\ K6 = Negative reinforcer (for example, footshock)
+\ K7 = Give a signal without reinforcers
+\ K8 = Stop/resume priming injections
+\ K9 = Give a mark (for example, time of s.c. injection)
+\
+\	KEYBOARD SIGNALS CONTROLLING EXPERIEMNTAL DESIGN
+\
+\ START = Substitute for any of K signals between K10 and K16
+\ K10 = Start experiment with filling the dead space and go to Maintenance during the Training session
+\ K11 = Start experiment with the Extinction-I stage and wait for K13 signal
+\ K12 = Start experiment with the Extinction-I stage and go through the all stages
+\ K13 = Start experiment with filling the dead space and go to Priming and go through the all stages
+\ K14 = Start experiment with the Priming dose of P and go to Loading
+\ K15 = Start experiment with Loading up to the satiety threshold and go to Maintenance
+\ K16 = Start experiment with the Extinction-II
+\ K17 = Start experiment with incontingent drug administration
+\ K18 = Stop the stage and go back to the beginning, PRINT and FLUSH data to the disk
+\ K19 = PRINT and FLUSH data to the disk
+\ K20 = Start experiment with the Priming by one food pellet and go to Loading during the food Training
+\ K21 = Start experiment without the Priming and go to food Loading
+\ K22 = Start experiments with Food/Fluid and self-administration outside of Blood/Brain Barrier (OBBB)
+\ K23 = Start experiments with Food/Fluid and central self-administration inside of BBB (IBBB)
+\ K24 = Start experiments with central self-administration (IBBB)
+\ K31 = Give an injection with signal from the keyboard
+\ K32 = Refill the dead space of the catheter
+\ K38 = Suspend all injections for the test drug administration - beginning of the procedure
+\ K39 = Inject the rest of a test drug from the dead space and refill the dead space with SA drug - end of procedure
+\ K41 = Skip the current dose and go to the next dose
+\ K42 = Reset rate of injection or infusion after change in motor, syringe or dial value
+\ K50 = PRINT and STOPABORTFLUSH
+\ K99 = STOPKILL
+\
+\			INTERNAL SIGNALS
+\
+\		INPUT AND OUTPUT DEVICES
+\ Z1 = Beginning of injection and of time out period
+\ Z2 = End of injection
+\ Z3 = End of time out period
+\ Z4 = Beginning of the signal (light and/or noise)
+\ Z5 = End of the signal (light and/or noise)
+\ Z6 = Beginning or end of the constant infusion (same as K2)
+\ Z7 = Output activated by the experimenter (K signal from the keyboard)
+\ Z8 = Output activated by the program
+\ Z9 = Output activated by the animal
+\ Z10 = Activation of the food or water dispenser
+\
+\		STAGES OF THE SESSION
+\ Z11 = Beginning of extinction-I stage: sham injections (sound and light signal)
+\ Z12 = Beginning of filling the dead space of the catheter by the program
+\ Z13 = Beginning of the last waiting period for complete extinction of spontaneous presses
+\ Z14 = Beginning of reinstatement: zero point for escalating and fixed priming doses
+\ Z15 = Beginning of maintenance: fixed ratio, fixed time out, progressive dose
+\ Z16 = Beginning of extinction-II stage: no sham injections or signals
+\ Z17 = End of programmed inter-injection interval
+\ Z18 = End of analyses of the last event
+\ Z19 = End of the stage of the experiment and beginning of the next stage
+\ Z20 = Attempt to self-administer a potentially lethal dose of the drug
+\		SCHEDULES OF REINFORCEMENT
+\ Z21 = Progressive ratio schedule
+\ Z22 = Random ratio schedule
+\ Z23 = Ratio proportional to the dose schedule
+\ Z24 = Progressive time out schedule
+\ Z25 = Random time out schedule
+\ Z26 = Time out proportional to the dose schedule
+\ Z27 = Progressive interval schedule
+\ Z28 = Random interval schedule
+\ Z29 = Interval proportional to the dose schedule
+\ Z30 = Progressive dose schedule
+\ Z31 = Random dose schedule
+\		SPECIAL SIGNAL
+\ Z32 = End of filling of the dead space initiated by K10, K14 and K32/39 signals (end of time out)
+\************************************************************************************
+\			DEVICES
+\************************************************************************************
+\			INPUTS (blue labels)
+^ActiveLever=1 	\ Active Lever
+^InactiveLever=2\ Inactive Lever
+^ActivePoke=3 	\ Active Nose-poke for drug
+^InactivePoke=4	\ Inactive Input Nose-poke 
+^ActiveInput=5	\ Active Input
+^OutOfInfusiont=6	\ Inactive Input or Infusion pump is out of solution (see statement S.S.15=2)
+^StartSession=7	\ Start the Session by Pushing the Button
+^OutOfInjection=8	\ Injection pump is out of solution (see statement S.S.2=3)
+\			OUTPUTS (red labels)
+^INJECT=1	\ Injection pump
+^INFUSE=2	\ Infusion pump
+^FEEDER=3	\ Food dispenser
+^WATER=4	\ Water dispenser
+^POSIT=5	\ Positive reinforcer
+^NEGAT=6	\ Negative reinforcer
+^BOX=7		\ Flushing light of the end of designed stages
+^HOUSE=8	\ House light (Light: Dark cycle)
+^SIGNAL1A=9	\ Active light signal
+^SIGNAL1I=10	\ Inactive light signal
+^SIGNAL2A=11	\ Active sound signal
+^SIGNAL2I=12	\ Inactive sound signal
+^SIGNAL3A=13	\ Active smell signal
+^SIGNAL3I=14	\ Inactive smell signal
+\************************************************************************************
+\		CONSTANTS USED IN THIS PROGRAM
+\************************************************************************************
+\ MICE: A(0)=2, A(1)=2 (ChR), A(2)=52 (SW), A(13)=424, A(28)=, A(29)=, A(32)=20
+\ For other dugs: A(7), (28), (35 – 40), (44 – 47), Y(10 – 13), P, OF
+\ A    0  1  2  3  4  5  6  7  8  9 10 11 12   13*14     15     16     17 18 19 20 21  22  23 24 25 26 27  28 29 30 31  32 33 34   35   36    37 38  39   40 41   42  43 44  45     46    47  48  49 50 51 52 53 54 55 56 57 58 59
+LISTA= 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 512, 0, 64800, 43200, 43200, 0, 0, 0, 0, 45, 66, 0, 0, 0, 0, 40, 0, 0, 0, 45, 1, 5, 0.4, 600, 5000, 0, 60, 1.1, 3, 2.2, 30, 5, 15, 20000, 6000, 60, 30, 0, 0, 0, 0, 0, 1, 1, 0, 0, 9
+LIST I = 100, 150, 200, 250, 300,  350, 400, 450, 500, 600	\ List of intervals (s)
+LIST G = 1, 2, 5, 10, 25, 100					\ List of ratios
+LIST H = 1, 2, 5, 10, 25, 100					\ List of time outs (s)
+LIST J =   75,   15,   -1,   -1,   0,    0		\ List of number of injections
+LIST O =  300, 3000, 1500, 6000, 750, 3000		\ List of doses (nmol/kg)
+\ MICE: Y(35)=0.3, Y(37)=5.4, Y(43)=0.25,
+\			   :drug 1:             cocaine 			:drug 2:                       RTI-55			   :
+\  #Y  0 1 2 3 4 5 6 7 8 9  10      11      12      13      14      15      16 17 18 19 20 21    22  23  24      25      26      27      28 29 30 31 32 33 34 35 36  37 38 39 40   41   42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59
+LISTY= 0,0,0,0,0,0,0,0,0,0,500,9999999,9999999,9999999,9999999,9999999,9999999, 0, 0, 0, 0, 0, 6000,750,750,9999999,9999999,9999999,9999999, 0, 0, 0, 0, 0, 0, 1, 0, 32, 0, 1, 0, 545, 0.5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+DIM K = 29
+DIM R = 39
+DIM S = 39
+DIM U = 19
+DIM V = 19
+DIM B = 9999
+DIM C = 9999
+DIM D = 9999
+DIM E = 9999
+DIM T = 9999
+\ Uppercase letter = array variable; lowercase letter = simple variable or “var"
+\  Z(#)       0   1  2  3  4  5  6  7  8   9  10  11  12  13  14  15  16  17  18  19  20  21  22 23 24  25  26
+\Variables: var,  A, B, C, D, E, f, G, H,  I,  J,  K,  l,  m,  n,  O,  p,  q,  R,  S,  T,  U,  V, w, x,  y, Z=dimE
+LIST Z =      9, 60, 0, 1, 1, 1, 0, 6, 6, 10,  7, 30,  0,  0,  0,  7,  0,  0, 40, 40,  1, 20, 20, 0, 0, 60, 9999
+\
+VAR_ALIAS Room temperature = A(19)
+VAR_ALIAS Room humidity = A(20)
+VAR_ALIAS Atmospheric pressure = A(21)
+Var_ALIAS Age = A(5)
+VAR_ALIAS First maintenance dose = O(0)
+VAR_ALIAS How many first doses = J(0)
+VAR_ALIAS Second maintenance dose = O(1)
+VAR_ALIAS How many second doses = J(1)
+VAR_ALIAS Third maintenance dose = O(2)
+VAR_ALIAS How many third doses = J(2)
+VAR_ALIAS Experimenter signature = A(59)
+\
+DISKFORMAT   = 8.1
+PRINTFORMAT  = 6.0
+DISKCOLUMNS  = 10
+PRINTCOLUMNS = 10
+DISKVARS  = A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z
+PRINTVARS = A,F,P,Q,K,R,S,U,W,V,Y
+DISKOPTIONS  = CONDENSEDHEADERS, FORMFEEDS, 80
+PRINTOPTIONS = CONDENSEDHEADERS, FORMFEEDS, 80
+\
+\************************************************************************************
+\			EXPERIMENTAL  DESIGN
+\************************************************************************************
+S.S.1,	\ START AND DESIGN THE EXPERIMENT
+S1,	\ Set values and POPULATION and CUES
+   0.01": ON^HOUSE; SET F=1, P=3000, A(3)=SUBJECTNUMBER, A(8)=GROUPNUMBER, A(13)=A(13)+BOXNUMBER, A(25)=Y(39)*Y(41)*Y(43)/1000; SHOW 5,Phase: START,0; IF A(0)=2 [@MICE, @RATS]
+ @MICE: SET Q=1440, A(6)=(EXPNUMBER-Y(35)-Y(36)), Y(37)=5.4, W=A(6)/1000; IF (W<0.01) OR (W>0.05) [@WRONG,@WEIGT]
+	@WRONG: --->S14
+	@WEIGT: IF A(3)<300 [@CHR,@SAS]
+	    @CHR: SET A(1)=A(1), A(2)=A(2)--->S2
+	    @SAS: SET A(1)=A(1), A(2)=A(2)--->S2
+ @RATS: SET Q=1440, A(6)=(EXPNUMBER-Y(35)-Y(36)), W=A(6)/1000; IF (W<0.1) OR (W>0.7) [@WRONG,@WEIGT]
+	@WRONG: --->S14
+	@WEIGT: IF (A(3)=579) or (A(3)=589) [@LARGE,@SMALL]
+	    @LARGE: SET Y(37)=60--->S2		\ Femoral vein
+	    @SMALL: --->S2			\ Jugular vein
+S2,	\ Start the session: #START=#K12=#R7 – training and acquisition – TRANSITION STAGE
+   #K10: IF Q=1440 [@NIGHT,@DAY]
+        @NIGHT: SET Q=180, P=3000--->S9	\ go maintenance stage –TRAINING SESSION
+        @DAY: SET Q=180, P=3000--->S9	\ go to the maintenance stage –ACQUISITION TEST
+   #K11: SET A(43)=Q; Z11; Z28; Z31--->S3
+          \ go to the extinction-I stage and wait for K13 signal – PRIMING THRESHOLD MEASUREMENT
+   #START!#K12!#R7: Z11; Z28; Z31--->S3\ go to the extinction-I stage with only light signal
+   #K13: Z12--->S6		\ go to filling the dead space of the catheter
+   #K14: --->S5 \ go to the loading-reinstatement stage – DOSE-RESPONSE TEST
+   #K15: SET Y(5)=P; Z15--->S10	\ go to the maintenance stage
+   #K16:--->S11			\ go to the extinction-II stage
+   #K17: SET A(40)=1.5; Z11; Z28; Z31--->S3	\ go to the extinction-I stage with only light signal
+   #K20: SET A(7)=300, A(8)=33, A(34)=1, Q=180--->S7 \ go to food/fluid training/loading
+   #K21: SET A(7)=301, A(8)=33, A(34)=1, Q=360 --->S7 \ go to food/fluid loading/maintenance
+   #K22: Z15; SET Y(5)=P, Q=180--->S10\ go to food/fluid+Out of BBBarrier
+   #K23: Z15; SET A(7)=210, A(8)=16, A(28)=0.001, P=0.002, Y(5)=P, Q=180--->S10 \ go to the maintenance of food/fluid + central administration of the drug (IBBB)
+   #K24: Z15; SET A(7)=210, A(8)=16, A(28)=5, P=5, Y(5)=P, Q=180--->S10 \ go to IBBB peptide MCH
+   #K25: Z15; SET A(7)=1, A(8)=16, A(28)=15, P=30, Y(5)=P, Q=180--->S10 \ go to IBBB cocaine 
+   #K99: CLEAR 1,60--->STOPKILL	\ clear loaded information in case of an error
+S3,	\ Start sham priming and wait for the criterion of accomplished EXTINCTION-I
+   #Z3: IF Y(4) >= A(43)*600--->S4	\ go to filling the dead space of the catheter
+   #K13:--->S4		\ go to filling the dead space of the catheter
+   #K18: SHOW 5,Phase: START,0--->S2
+S4,            \Wait for proper event coding of EXTINCTION-I
+   0.1": Z19; Z12--->S5	\ go to filling the dead space of the catheter
+   #K18: SHOW 5,Phase: START,0--->S2
+S5,	\ Start filling the dead space of the catheter – TRANSITION STAGE
+   #Z32: Z13--->SX		\ when the catheter is filled wait Y(3) sec for complete extinction-I
+   #Z14:--->S7		\ when the catheter is filled go to the reinstatement
+   #K18: SHOW 5,Phase: START,0--->S2
+S6,	\ Start filling the dead space of the catheter – TRANSITION STAGE
+   #Z32: Z13--->SX		\ when the catheter is filled wait Y(3) sec for complete extinction-I
+   #Z14: SET Y(5)=P, Y(3)=0.693/Y(10)*0.5, A(38)=P*1.5, A(37)=0, A(44)=(A(47)-Y(21))/Y(5); Z1;Z8--->S7
+	\ give priming (fixed dose P) and go to the reinstatement
+   #K18: SHOW 5,Phase: START,0--->S2
+S7,	\ Wait for the criterion of accomplished REINSTATEMENT (PRIMING+LOADING)
+\   #Z3: IF  Y(7) >= A(44) [@MAINT,@OUTSOL] Method 1 - contingent; #Z3: IF (Y(21)>A(47)*A(40)) [@MAINT,@OUTSOL] Method 2 - noncontingent; 
+    #Z3: IF  Y(7) >= A(44) [@MAINT,@OUTSOL]
+	@MAINT: --->S8
+	@OUTSOL: IF Y(7)=-1 [SET Y(7)=0, E(X)=E(X)-61000000; Z19]--->S11 \ out of solution
+   #Z10!#Z17: IF K(0)=21 [@MAINT,@EXTIN] 
+                  @MAINT: IF (U(7) >= (A(44)-1)*A(32)) OR (Y(0)>Q*600) [Z19;Z15]--->S10
+                  @EXTIN: IF ((U(7) >= (A(44)-1)*A(32)) OR (Y(0)>Q*600)) AND (K(0)=21)--->S12
+   #K18: SHOW 5,Phase: START,0--->S2
+S8,	\ Define the schedule for the maintenance stage in the end of REINSTATEMENT
+   0.1": IF K(0)=17 [@INCONT,@CONTIN]
+	@INCONT: SET Q=Y(0)/600+60; Z19;Z15--->S10	\go to the incontingent maintenance
+	@CONTIN: Z19;Z15;Z29;Z30--->S10			\ go to the contingent maintenance
+   #K18: SHOW 5,Phase: START,0--->S2
+S9,	\ Wait for the signal of accomplished TRANSITION stage (only training sessions)
+   #Z32: SET Y(5)=1500, Y(45)=Y(5), A(55)=Y(5), A(56)=Y(5); Z15--->S10    \ set the unit dose and go to the maintenance
+   #K18: SHOW 5,Phase: START,0--->S2
+S10,	\ Wait for the criterion of accomplished MAINTENANCE
+   1.1": IF ((N= -1) OR (Y(0)>Q*600)) AND (S.S.3=2) [@EXTIN,@PROGR]
+	@EXTIN: Z19--->S11				\ go to the extinction-II
+	@PROGR: IF (S.S.11=2) AND (Y(4) >= A(49)*600)--->S11	\ go to the extinction-II
+   #K16!#R8: Z19--->S11					\ go to the extinction-II
+   #K18: SHOW 5,Phase: START,0--->S2			\ go back to beginning
+S11,	\ Define the schedule for the extinction-II stage in the end of MAINTENANCE
+   0.1": Z16--->S13		\ go to the extinction-II
+   #K18: SHOW 5,Phase: START,0--->S2
+S12, 	\ Define the schedule for the extinction-II stage in the end of FOOD TRAINING/LOADING
+   (M+12)#T: SET Q=Q+60; Z19;Z16--->S13
+S13,	\ Wait for the criterion of accomplished EXTINCTION-II to end the session
+   1": IF ((Y(1)>Y(3)*10) AND (R(30)>0) AND (Y(0)-Y(53)>A(49)*600)) OR (Y(0)>Q*600) [@STOP,@CONT]
+	@STOP: Z19--->S16	\ end the session when extinction-II criterion is met
+	@CONT:--->SX
+   #K18: SHOW 5,Phase: START,0--->S2
+S14,	\ Flush BOX light and SHOW 5 when designed program is finished
+   0.5": ON^BOX; SHOW 3,WRONG,0, 4,BODY WEIGHT,0, 5,Phase: END,9--->S15
+   #K18: ON^BOX; SHOW 5,Phase: START,0--->S2	\ go back to the beginning
+   #K99: CLEAR 1,60--->STOPKILL	\ clear loaded information in case of an error
+S15,
+   1": OFF^BOX; CLEAR 3,5--->S14
+   #K18: SHOW 5,Phase: START,0--->S2 		\ go back to the beginning
+   #K99: CLEAR 1,60--->STOPKILL	\ clear loaded information in case of an error
+S16,	\ Flush BOX light and SHOW 5 when designed program is finished
+   0.5": ON^BOX; SHOW 3,EXTINCT,A(49), 4,MINUTES,0, 5,Phase: END,9--->S17
+   #K18: ON^BOX; SHOW 5,Phase: START,0--->S2	\ go back to the beginning
+S17,
+   1": OFF^BOX; CLEAR 3,5--->S16
+   #K18: SHOW 5,Phase: START,0--->S2 		\ go back to the beginning
+\***********************************************************************************
+\			OUTPUT  DEVICES
+\***********************************************************************************
+S.S.2,		\ PUMP, FOOD AND WATER DISPENSERS CONTROL
+S1, 	\ Wait for a K signal
+   #K10!#K13!#K14!#K32!#K38:--->S8			\ Suspend during filling the catheter dead space
+   #START!#K12!#R7!#K17:--->S6				\ Suspend for sham injections
+   #K11!#K15!#K16!#K20!#K21!#K22!#K23!#K24!#K25:--->S2	\ Go to the waiting for Z1 signal state
+S2,	\ Basic State: Wait for a signal Z1 (PUMP ON) and start pumping
+   #Z1: IF (A(8)>13) AND (A(8)<22) [@INBBB,@OTBBB]
+            @INBBB: SET U(9)=A(25)*A(28), L=P/U(9)*1", Y(1)=0, U(15)=U(15)+Y(5); ON^INJECT; ADD Y(7); IF A(24)>0 [@CUES,@NOCUE]
+		@CUES: Z4--->S3
+		@NOCUE:--->S3
+            @OTBBB: SET U(9)=A(25)*A(28)/W, L=Y(5)/U(9)*1", Y(1)=0, U(15)=U(15)+Y(5); ON^INJECT; ADD Y(7); IF A(24)>0 [@CUES,@NOCUE]
+		@CUES: Z4--->S3
+		@NOCUE:--->S3
+   #K9!#K39: IF A(10)=A(8) [@SAME,@DIFF]
+	@SAME: SET L=Y(37)/A(25)*1"; ON^INJECT--->S3
+	@DIFF:--->SX
+   #Z10: ADD Y(7); SET Y(1)=0, U(7)=U(7)+A(32); ON^FEEDER; IF A(24)>0 [@CUES,@NOCUE]
+	@CUES: Z4--->S9
+	@NOCUE:--->S9
+   #K32!#K38!#Z12:--->S8
+   #K18: SET A(51)=27--->S11		\ Go to awaiting the signal for new procedure
+S3,	\ In L sec stop pumping and issue Z2 signal
+   L#T: SET Y(6)=0; OFF^INJECT; Z2--->S2
+   #K18: SET Y(6)=0, A(51)=27; OFF^INJECT; Z2--->S11 \ Go to awaiting the signal for new procedure
+   #R8: SET Y(6)=0, N=-1, Y(7)=-1, M=0, Y(48)=0, A(51)=7; OFF^INJECT; Z2--->S4
+	\ Suspend and go to extinction-II if injection pump is out of solution
+S4,	\ Flush a box light and a Show that no cocaine in the syringe, ERROR code =7
+   0.5": ON^BOX; SHOW 5,Error: Out of solution,7--->S5
+   #K18:---> S11			\ Go to awaiting the signal for new procedure
+S5,
+   0.5": OFF^BOX; CLEAR 5,5--->S4
+   #K18: OFF^BOX---> S11		\ Go to awaiting the signal for new procedure
+S6,	\ Start sham injection (All other signals according to A(24) except pump noise)
+   #Z1: SET L=Y(5)*W/A(28)/A(25)*1"; SET Y(1)=0; IF A(24)>0 [@CUES,@NOCUE]
+	@CUES: Z4--->S7
+	@NOCUE:--->S7
+   #Z12:--->S8			\ Suspend during filling the catheter dead space
+   #Z14:--->S2			\ End the suspension for sham injections
+   #K18:--->S1			\ Go back to the beginning
+S7,	\ Finish sham injection
+   L#T: Z2--->S6
+   #Z12:--->S8			\ Suspend during filling the catheter dead space
+   #Z14: Z2--->S2			\ End the suspension for sham injections
+   #K18: Z2---> S1		\ Go back to the beginning	
+S8,	\ Suspension state when the dead space of the catheter is filled
+   #Z14!#Z15!#Z32:--->S2		\ End the suspension after filling the dead space
+S9,	\ Give as many pellets as Y(8) per one active response
+   0.1": OFF^FEEDER ; ADD Y(9); IF Y(8)>Y(9) [@MORE,@ENGH]
+	@MORE:--->S10
+	@ENGH: SET Y(6)=0, Y(9)=0--->S2
+   #K18: SET Y(6)=0; OFF^FEEDER--->S1	\ Go back to the beginning
+S10,
+   0.1": SET U(7)=U(7)+A(32); ON^FEEDER--->S9
+   #K18: SET Y(6)=0; OFF^FEEDER--->S1	\ Go back to the beginning
+S11, 	\ Wait for a K signal
+   #K10!#K14:--->S2 		\ Go to the waiting for Z1 signal state
+   #START!#K12!#R7:--->S6				\ Suspend for sham injections
+   #K11!#K15!#K16!#K20!#K21!#K22!#K23!#K24!#K25:--->S2	\ Go to the waiting for Z1 signal state
+   #K32!#K38!#Z12:--->S8		\ Suspend during filling the catheter dead space
+   #K13: IF S.S.1=6 --->S4		\ Suspend during filling the catheter dead space
+\
+S.S.3,	\ TIME OUT CONTROL
+S1,	\ Wait for a K signal
+   #K10!#K13!#K14!#K32!#K38:--->S4 \ Suspend during filling the catheter dead space
+   #K11: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #START!#K12!#R7: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K15: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K16: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K17: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K20: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K21: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K22: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K23: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K24: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+   #K25: SET A(33)=A(33), A(34)=A(34)--->S2	\ Go to the waiting for Z1 signal state
+S2,	\ Wait for a signal Z1 (beginning of TIME OUT) signal
+   #K32!#K38!#Z12:--->S4		\ Suspend during filling the catheter dead space
+   #K13: IF S.S.1=6--->S4		\ Suspend during filling the catheter dead space
+   #Z1!#Z10: IF L/1"<A(34) [@MINTO,@PUMPTO]
+		@MINTO: SET M=A(34)*1"--->S3
+		@PUMPTO: SET M=A(33)*L--->S3
+   #K9!#K39: IF A(10)=A(8) [@SAME,@DIFF]
+	@SAME: IF L/1"<A(34) [@MINTO,@PUMPTO]
+		@MINTO: SET M=A(34)*1"--->S3
+		@PUMPTO: SET M=A(33)*L--->S3
+	@DIFF:--->SX
+S3,	\ In M sec issue Z3 signal (end of TIME OUT)
+   M#T!#R8: Z3--->S2
+   #K18: Z3--->S2		\ Go to the basic state ON
+S4,	\ Suspension state when the dead space of the catheter is filled
+   #Z14!#Z15!#Z32!#K18:--->S2	\ End the suspension
+\
+S.S.4,	\ SIGNAL (CUE) CONTROL
+S1,	\ Wait for a K signal
+   #K10: SET A(24)=31110--->S4	\ Suspend during filling the dead space of the catheter
+   #K13: SET A(24)=31110--->S4		\ Suspend during filling the catheter dead space
+   #K14: SET A(24)=31110--->S4		\ Suspend during filling the catheter dead space
+   #K11: SET A(24)=31110--->S2		\ Go to the waiting for Z4 signal state
+   #START!#K12!#R7!#K17: SET A(24)=31110--->S2		\ Go to the waiting for Z4 signal state
+   #K15: SET A(24)=31110--->S2		\ Go to the waiting for Z4 signal state
+   #K16: SET A(24)=0--->S2		\ Go to the waiting for Z4 signal state
+   #K17: SET A(24)=0--->S2		\ Go to the waiting for Z4 signal state
+   #K20: SET A(24)=1100--->S2		\ Go to the waiting for Z4 signal state
+   #K21: SET A(24)=100--->S2		\ Go to the waiting for Z4 signal state
+   #K22: SET A(24)=100--->S2		\ Go to the waiting for Z4 signal state
+   #K23: SET A(24)=100--->S2		\ Go to the waiting for Z4 signal state
+   #K24: SET A(24)=100--->S2		\ Go to the waiting for Z4 signal state
+   #K25: SET A(24)=100--->S2 		\ Go to the waiting for Z4 signal state
+S2, 	\ Wait for a signal Z4 (SIGNAL ON)
+   #Z4: SET Y(48)=M; ON^SIGNAL1A--->S3
+   #K32!#K38!#Z12: --->S4		\ Suspend during filling the catheter dead space
+   #K13: IF S.S.1=6 --->S4		\ Suspend during filling the catheter dead space
+S3,	\ In Y(48) sec issue Z5 signal (SIGNAL OFF)
+   Y(48)#T: OFF^SIGNAL1A; Z5--->S2
+   #K18: OFF^SIGNAL1A; Z5--->S2
+S4,	\ Suspension state when the catheter dead space is filled
+   #Z14!#Z15!#Z32!#K18:--->S2	\ End the suspension
+\
+S.S.5,	\ INTERVAL CONTROL
+S1,
+   #K10: SET Y(3)=A(39)*60+1--->S2
+   #K11!#START!#K12!#R7!#K13:--->S2
+   #K14: SET Y(3)=A(39)*60+1--->S2
+   #K15: SET Y(3)=A(39)*60+1--->S2
+   #K16:--->S2
+   #K17:--->S2
+   #K20: SET A(39)=15, Y(3)=A(39)*60+1--->S2
+   #K22!#K23: SET A(39)=30, Y(3)=A(39)*60+1--->S2
+   #K8: SET Y(3)=A(39)*60+1--->S2		\ Resume priming injections
+S2,
+   1": IF Y(1)>=(Y(3)-1)*10 [Z17]--->SX
+   #K8!#Z21!#Z24!#Z27: SET Y(3)=0--->S1	\ Stop priming injections
+   #K18:--->S1			\ Go back to the beginning
+S3,
+   #K18:---> S1			\ Go back to the beginning
+\***********************************************************************************
+\			STAGES
+\***********************************************************************************
+S.S.6,	\ SHAM PRIMING = EXTINCTION-I STAGE
+S1,
+   #Z11: Z18; SET Y(5)=0--->S2
+S2,
+   #Z17: ADD S(2); IF Y(5)>0 [Z1;Z8]--->S3	\ Repeat sham priming after Y(3) sec
+   #R1!#R3: SET S(2)=0; IF S.S.3=2 [@TOWARD,@TIMOUT]	       \ Count if not TIME OUT
+             @TOWARD: ADD Y(6); IF Y(6)>=F [@DISPEN,@COUNT]  \ Ratio schedule criterion 
+                       @DISPEN: IF Y(5)>0 [Z1; Z9]--->S3
+	     @COUNT:--->SX
+            @TIMOUT:--->SX
+   #R2!#R4: SET S(2)=0--->SX
+   #K13: SET Y(1)=0--->S1
+   #Z19!#K18:--->S1		\ Stop extinction-I
+S3,
+   #Z3:--->S2
+   #Z19!#K18:--->S1		\ Stop extinction-I
+\
+S.S.7,	\ FILLING THE DEAD SPACE OF THE CATHETER = TRANSITION STAGE
+S1,
+   #K10: IF S.S.1=9 [SET L=Y(37)/A(25)*1", V(5)=Y(0)/10; ON^INJECT; Z1;Z18]--->S3
+   #K14: IF S.S.1=5 [SET L=Y(37)/A(25)*1", V(5)=Y(0)/10; ON^INJECT; Z1;Z18]--->S3
+   #Z12: Z18--->S2	\ Fill the dead volume before the first in series of escalating priming injections
+S2,	\ Wait Y(3) sec without presses and inject the test compound and/or fill up the catheter
+   #Z17: SET Y(1)=0, V(5)=Y(0)/10; IF A(10)=A(8) [@SAMER,@ROUTE]
+	@SAMER: SET E(X)=E(X)+9000000; IF A(9)=A(7) [@SAMED,@DRUG]
+                           @SAMED: SET A(12)=A(11)/A(28), L=(A(12)*W+Y(37))/A(25)*1",
+		Y(3)=A(43)*60, A(41)=Q*1', Y(18)=Y(18)+A(11); ON^INJECT; Z1;Z18--->S3
+                           @DRUG: SET L=(A(12)*W+Y(37))/A(25)*1", A(41)=A(41)*1', Y(22)=Y(22)+A(11);
+		ON^INJECT; Z1;Z18--->S3
+	@ROUTE: SET L=Y(37)/A(25)*1"; ON^INJECT; Z1;Z18--->S3
+   #R1!#R2!#R3!#R4: SET Y(51)=Y(51)+Y(1)/10, Y(1)=0--->SX
+   #K18:--->S1		\ Do not start filling the dead space
+S3,
+   L#T: SET K(Y(54))=32, Y(4)=Y(0)/10; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54);
+	OFF^INJECT; Z2;Z3--->S4
+S4, 					\ Wait till the dead space filling has been recorded or 
+   A(41)#T: Z32--->S5			\ Wait A(41) min if test compound was injected
+   #Z17: IF (Y(21)<A(39)*A(37)) [Z32]--->S5	\ Wait Y(3) sec after the last induced response  
+   #R1!#R2!#R3!#R4: SET Y(51)=Y(51)+Y(1)/10, Y(1)=0--->SX
+   #K18:--->S5			\ Go to the basic state 
+S5,
+   #K32!#K39: IF S.S.2=8 [SET L=Y(37)/A(25)*1", V(5)=Y(0)/10; ON^INJECT; Z1;Z18]--->S3
+   #Z12: Z18--->S2
+\
+S.S.8,	\ ESCALATING OR FIXED PRIMING DOSES = REINSTATEMENT STAGE
+S1,
+   #K14: IF S.S.1=5 [SET Y(5)=P, Y(7)=0, A(44)=(A(47)-Y(21))/Y(5)]--->S5
+   #K20: IF S.S.1=7 [Z10;Z8; SET A(44)=100/A(55), Y(8)=A(55)]--->S8 \ Give a pellet and go to food/fluid training/loading
+   #K21: IF S.S.1=7 [SET A(44)=100/A(55), Y(8)=A(55)]--->S8	\ Go to food/fluid loading
+   #Z13: SET Y(1)=0, Y(5)=0, Y(3)=A(39)--->S2
+S2,	\ Wait Y(3) sec for extinction of spontaneous presses
+   #Z17: SET V(6)=Y(0)/10, V(7)=V(6), V(8)=V(6), Y(1)=0, A(41)=Y(4)/600; Z14;Z18--->S3
+   #R1!#R2!#R3!#R4: SET Y(1)=0--->SX
+   #Z19!#K18:--->S1	\ Stop escalating doses for priming
+S3,	\ Give true priming injections of ESCALATING DOSES every A(39) sec
+\ Linear equation: A(37) = slope 0.5 nmol/kg/sec, A(38) = minimal expected
+\   #Z17: SET R(19)=A(37)*(Y(0)/10-V(6))+A(38)-Y[18]-Y[19]-Y[20];
+\ Sigmoid increase in peak drug level – Hill equation: A(46)=maximal expected, A(38)=minimal expected, A(37)=5000 time factor, A(42)=2.2 shape factor (curvature)
+   #Z17: ~R[19]:=Exp(A[42]*ln(A[37]/(Y[0]/10-V[6])));~;
+         ~R[19]:=(A[46]-A[38])/(1+R[19])+A[38]-Y[18]-Y[19]-Y[20];~;
+              IF R(19)>0 [@PROC,@SKIP]
+	@PROC: SET Y(5)=R(19), U(1)=U(2), U(2)=Y(5), U(5)=U(15)+U(2), V(7)=V(8), V(8)=Y(0)/10, U(3)=U(4), U(4)=Y(21)+Y(5); SUB Y(7); Z1;Z8--->S4
+	@SKIP:--->SX
+\Exponential equation: A(37) = 0.0025587 slope; A(42) = slope of increase in projected level
+\    #Z17: ~R[19]:=Exp(A[37]*A[42]*(Y[0]/10-V[6]))+A[38]/A[42];~;
+\             ~R[19]:=R[19]-Y[18];~;
+\              IF R(19)>0 [@PROC,@SKIP]
+\	@PROC: SET Y(5)=R(19), U(1)=U(2), U(2)=Y(5), U(5)=U(15)+U(2), V(7)=V(8), V(8)=Y(0)/10, U(3)=U(4), U(4)=Y(21)+Y(5); SUB Y(7); Z1;Z8--->S4
+\	@SKIP:--->SX 
+\ Count active presses toward the criteria for reinstatement: intervals are shorter than A(48)
+   #R1!#R3: IF (Y(4)/10)<A(48) [@ADD,@RESET]
+                  @ADD: SET Y(4)=0; ADD Y(7);
+                                 IF Y(7)=2 [SET A(53)=Y(5), A(54)=(U(3)+U(4))/2, A(55)=U(2)]--->SX
+                  @RESET: SET Y(4)=0; ADD Y(7); IF Y(7)<=A(44) [SET Y(7)=1]--->SX
+   #Z19!#K18:--->S1	\ Stop escalating doses for priming
+S4,
+   #Z3:--->S3
+   #R1!#R3: IF (Y(4)/10)<A(48) [@ADD,@RESET]
+                  @ADD: SET Y(4)=0; ADD Y(7);
+                                 IF Y(7)=2 [SET A(53)=Y(5), A(54)=(U(3)+U(4))/2, A(55)=U(2)]--->SX
+                  @RESET: SET Y(4)=0; ADD Y(7); IF Y(7)<=A(44) [SET Y(7)=1]--->SX
+   #Z19!#K18:--->S1	\ Stop escalating doses for priming
+S5,
+    #Z32: SET E(X)=40000000, T(X)=Y(0)/10, C(X)=Y(18), B(X)=Y(19), D(X)=Y(20); ADD X; Z14--->S6 \ Go to loading stage
+S6,		\ Give FIXED LOADING DOSES when F requirement accomplished
+   #R1!#R3: SET Y(4)=0; IF S.S.3=2 [@TOWARD,@TIMOUT] \ Count if not TIME OUT
+             @TOWARD: ADD Y(6); IF Y(6)>=F [@INJECT,@COUNT]  \ Ratio schedule criterion 
+                       @INJECT: SET R(19)=Y(21)+Y(5); IF R(19)<A(46) [@DRUG,@SUICID]
+		@GRUG: IF Y(5)>0 [Z1;Z9]--->S7
+		@SUICID: Z20--->SX
+	     @COUNT:--->SX
+            @TIMOUT:--->SX
+   #Z19!#K18:--->S1	\ Stop loading with fixed doses
+S7,
+   #Z3:--->S6
+   #Z19!#K18:--->S1	\ Stop loading with fixed doses
+S8,		\ FOOD or WATER loading
+   #R1!#R3: IF S.S.3=2 [@TOWARD,@TIMOUT]		       \ Count if not TIME OUT
+             @TOWARD: ADD Y(6); IF Y(6)>=F [@DISPEN,@COUNT]  \ Ratio schedule criterion 
+                       @DISPEN: Z10; Z9--->SX
+	     @COUNT:--->SX
+            @TIMOUT:--->SX
+   #Z17: Z10;Z8--->SX
+   #Z19!#K18:--->S1	\ Stop food/fluid loading with fixed doses
+\
+S.S.9,	\ MAINTENANCE STAGE = FR/VR, FI/VI, FD/VD SCHEDULES
+S1,
+   #Z15: IF K(0)=21 [@FOOD,@PUMP]
+             @FOOD: SET E(X)=60000000, T(X)=Y(0)/10, C(X)=Y(18), B(X)=Y(19), D(X)=Y(20), Y(8)=A(56); ADD X--->S5 \ Only food/water
+             @PUMP: SET E(X)=60000000, T(X)=Y(0)/10, C(X)=Y(18), B(X)=Y(19), D(X)=Y(20); ADD X;
+	IF (K(0)=22) OR (K(0)=23) [@FDR,@DR]
+	@FDR:--->S3 		\ Food and Drug Maintenance stage
+	@DR:IF K(0)=17 [@INCONT,@CONTIN]
+		@INCONT:--->S6	\ Only drug Incontingent Maintenance stage
+		@CONTIN:--->S2	\ Only Drug Contingent Maintenance stage
+S2,	\ Only DRUG
+   #R1!#R3: SET Y(4)=0; IF S.S.3=2 [@TOWARD,@TIMOUT] \ Count if not TIME OUT
+             @TOWARD: ADD Y(6); IF Y(6)>=F [@INJECT,@COUNT]  \ Ratio schedule criterion 
+                       @INJECT: SET R(29)=Y(21)+Y(5); IF R(29)<A(46) [@DRUG,@SUICID]
+		@GRUG: IF Y(5)>0 [Z1;Z9]--->SX
+		@SUICID: Z20--->SX
+	     @COUNT:--->SX
+            @TIMOUT:--->SX
+   #R8:--->S1		\ Injection pump is out of solution - Stop maintenance stage
+   #Z17: SET Y(7)=0; IF Y(5)>0 [SET Y(45)=Y(5), Y(5)=P; Z1;Z8]--->SX
+   #Z2: SET Y(5)=Y(45)--->SX		\ Restore maintenance dose
+   #Z19!#K18:--->S1			\ Stop Maintenance stage
+S3,	\ DRUG and FOOD
+   #R1!#R3: SET Y(4)=0; IF S.S.3=2 [@TOWARD,@TIMOUT] \ Count if not TIME OUT
+             @TOWARD: ADD Y(6); IF Y(6)>=F [@INJECT,@COUNT]  \ Ratio schedule criterion 
+                       @INJECT: SET R(29)=Y(21)+Y(5); IF R(29)<A(46) [@DRUG,@SUICID]
+		@GRUG: IF Y(5)>0 [Z1;Z9; ON^FEEDER]--->S4
+		@SUICID: Z20--->SX
+	     @COUNT:--->SX
+            @TIMOUT:--->SX
+   #Z17: SET Y(7)=0; IF Y(5)>0 [Z1;Z8; ON^FEEDER]--->S4
+   #Z19!#K18:--->S1			\ Stop Maintenance stage
+S4,	\ Only FOOD
+   10#T: OFF^FEEDER--->S3		\ Give one pellet
+S5,
+   #R1!#R3: SET Y(4)=0; IF S.S.3=2 [@TOWARD,@TIMOUT]	\ Count if not TIME OUT
+             @TOWARD: ADD Y(6); IF Y(6)>=F [@DISPN,@COUNT]  \ Ratio schedule criterion 
+                       @DISPN: Z9;Z10--->SX
+	     @COUNT:--->SX
+            @TIMOUT:--->SX
+   #Z17: SET Y(7)=0; Z8;Z10--->SX
+   #Z19!#K18:--->S1				\ Stop Maintenance stage
+S6,
+   #Z17: SET Y(5)=A(47)*A(40)-Y(21); Z1;Z8--->SX	\ Give injections every Y(3) sec
+   #Z19!#K18:--->S1				\ Stop Maintenance stage
+\
+S.S.10,	\ EXTINCTION-II STAGE
+S1,
+   #Z16: SET V(15)=99999999, V(16)=99999999, Y(53)=Y(0), Y(3)=A(49)*60--->S2
+S2,
+   F#R1!F#R3: SET Y(1)=0, V(15)=Y(0)/10, E(X)=90000000, T(X)=Y(0)/10, C(X)=Y(18), B(X)=Y(19), D(X)=Y(20); ADD X; Z9--->S3
+   #R2!#R4: SET Y(1)=0, V(16)=Y(0)/10, E(X)=90000000, T(X)=Y(0)/10, C(X)=Y(18), B(X)=Y(19), D(X)=Y(20); ADD X--->S3
+   #K18:--->S1				\ Stop extinction-II
+S3,
+   F#R1!F#R3: SET Y(1)=0; Z9--->SX
+   #R2!#R4: SET Y(1)=0--->SX
+   #K18:--->S1				\ Stop extinction-II
+\*************************************************************************************
+\			SCHEDULES
+\*************************************************************************************
+S.S.11,	\ VARIABLE RATIO SCHEDULE (VR)
+S1,
+   #Z21:--->S2			\ Start PROGRESSIVE ratio schedule
+   #Z22: RANDI F=G--->S3	\ Start RANDOM ratio schedule
+   #Z23:--->S4			\ Start PROPORTIONAL ratio schedule
+S2,
+   #Z9: SET R(28)=F, A(42)=0.4; ~F:=5*exp(Y[7]*A[42])-5;~; SET A(57)=R(28)---> SX \ Progressive ratio
+   #Z19!#K18: SET F=1--->S1
+S3,
+   #Z9: RANDI F=G--->SX		\ RANDI=with replacement, RANDD=no replacement
+   #Z19!#K18: SET F=1--->S1
+S4,
+   #Z9: SET F=Y(5)*0.01--->SX
+   #Z19!#K18: SET F=1--->S1
+\
+S.S.12,	\ VARIABLE TIME OUT SCHEDULE (VTO)
+S1,
+   #Z24:--->S2			\ Start PROGRESSIVE time out schedule
+   #Z25: RANDI A(34)=H--->S3		\ Start RANDOM time out schedule
+   #Z26:--->S4			\ Start PROPORTIONAL time out schedule
+S2,
+   #Z3: SET V(13)=M; ~M:=5*exp(Y[7]*A[41])-5;~; SET A(57)=(V(13)+M)/2---> SX \ Progressive TiOt
+   #Z19!#K18:--->S1
+S3,
+   #Z3: RANDI A(34)=H--->SX		\ RANDI=with replacement, RANDD=no replacement
+   #Z19!#K18:--->S1
+S4,
+   #Z3: SET A(34)=Y(5)--->SX
+   #Z19!#K18:--->S1
+\
+S.S.13,	\ VARIABLE INTERVAL SCHEDULE (VI)
+S1,
+   #Z27:--->S2			\ Start PROGRESSIVE interval schedule
+   #Z28: RANDI Y(3)=I--->S3		\ Start RANDOM interval schedule
+   #Z29: IF A(36)>0 [SET Y(3)=A(35)*Y(5)+A(36)]--->S4 \ Start PROPORTIONAL interval schedule
+S2,
+   #Z3: SET V(14)=Y(3); ~Y[3]:=5*exp(Y[7]*A[41])-5;~;SET A(57)=(V(14)+Y(3))/2--->SX \ Progressive
+   #Z19!#K18:--->S1
+S3,
+   #Z3: RANDI Y(3)=I--->SX		\ RANDI=with replacement, RANDD=no replacement
+   #Z19!#K18:--->S1
+S4,
+   #Z2: IF A(36)>0 [SET Y(3)=A(35)*Y(5)+A(36)]--->SX
+   #Z19!#K18:--->S1
+\
+S.S.14,	\ VARIABLE DOSE SCHEDULE (VD)
+S1,
+   #Z30: LIST N=J(Y(55)); SUB Y(55); LIST Y(5)=O(Y(55)); SET Y(45)=Y(5),Y(7)=0, A(56)=O(0), --->S2	\ Start PROGRESSIVE dose schedule
+   #Z31: RANDI Y(5)=O; SET Y(45)=Y(5)--->S4		\ Start RANDOM dose schedule
+S2,	\ Wait until the end of TIME OUT period
+   #Z3:--->S3
+   #K41: LIST N=J(Y(55)); SUB Y(55); LIST Y(5)=O(Y(55)); SET Y(45)=Y(5), Y(7)=0, A(56)=Y(5); ADD Y(59); SHOW 5,Phase: MAINT,Y(59)--->SX
+S3,	\ Wait until the appropriate code is assigned to the last time out
+   0.01": IF Y(7) >= N [@NEXT,@KEEP]
+                          @NEXT: LIST N=J(Y(55)); SUB Y(55); LIST Y(5)=O(Y(55)); SET Y(45)=Y(5), Y(7)=0, A(56)=Y(5), A(50)=A(50)+10; ADD Y(59); SHOW 5,Phase: MAINT,Y(59)--->S2
+                          @KEEP: --->S2
+   #Z19!#K18: SET Y(5)=0--->S1
+S4,	\ Wait until the end of TIME OUT period
+   #Z3: RANDI Y(5)=O; SET Y(45)=Y(5)--->SX	\ RANDI=with replacement, RANDD=no replacement
+   #Z19!#K18: SET Y(5)=0--->S1
+\*************************************************************************************
+\		DRUG LEVEL AND SESSION TIME
+\*************************************************************************************
+S.S.15,	\ CURRENT AMOUNT OF THE DRUG IN THE BODY
+S1, 
+   1#T: SET Y(10)=0.69315/Y(10), Y(11)=0.69315/Y(11), Y(12)=0.69315/Y(12), Y(13)=0.69315/Y(13), Y(14)=0.69315/Y(14), Y(15)=0.69315/Y(15), Y(16)=0.69315/Y(16), Y(22)=0.69315/Y(22), Y(23)=0.69315/Y(23), Y(24)=0.69315/Y(24), Y(25)=0.69315/Y(25), Y(26)=0.69315/Y(26), Y(27)=0.69315/Y(27), Y(28)=0.69315/Y(28)--->S2
+S2, \ Calculate elimination of the drug every sec according to one-, two- or three-compartment models
+   1": SET Y(18)=Y(18)*(1-Y(10)-Y(12)-Y(13))+Y(19)*Y(11)+Y(20)*Y(14)+Y(17),Y(19)=Y(19)*(1-Y(11)-Y(15))+Y(18)*Y(12), Y(20)=Y(20)*(1-Y(14)-Y(16))+Y(18)*Y(13), Y(30)=Y(30)*(1-Y(22)-Y(24)-Y(25))+Y(31)*Y(23)+Y(32)*Y(26)+Y(29),Y(31)=Y(31)*(1-Y(23)-Y(27))+Y(30)*Y(24), Y(32)=Y(32)*(1-Y(26)-Y(28))+Y(30)*Y(25), Y(21)=Y(18)+Y(19)+Y(20), Y(33)=Y(30)+Y(31)+Y(32)--->SX
+\   #K9: IF A(8)=A(10) [SET Y(30)=Y(30)+A(11)]--->SX    			\ Add test DRUG 2 only if injected i.v. by hand
+   #K42: SET A(26)=Y(40)*Y(42)*Y(44)/1000, U(10)=A(26)*A(29)/W--->SX 	\ Reset infusion rate
+   #K2!#Z6: IF A(30)=A(7) [@SAMDR,@DIFDR]
+          @SAMDR: IF Y(34)=0 [@INFUS,@STOP]
+               @INFUS: SET Y(17)=U(10), Y(34)=1; SHOW 50,INFUSION,Y(34)--->SX
+               @STOP: SET Y(17)=0, Y(34)=0; SHOW 50,INFUSION,Y(34)--->SX
+          @DIFDR: IF Y(34)=0 [@INFUS,@STOP]
+               @INFUS: IF A(30)>0 [SET Y(29)=U(10), Y(34)=1; SHOW 55,INFUSION,Y(34)]--->SX
+               @STOP: SET Y(29)=0, Y(34)=0; SHOW 55,INFUSION,Y(34)--->SX
+\
+S.S.16,	\ Add injected doses of SA drug 1
+S1,	\ Wait for an internal signal “End Suspension"
+   #Z14!#Z15!#Z32:--->S2		\ End suspension
+S2, 	\ Basic State: Wait for a signal Z1 (PUMP ON)
+   #Z1: IF L>0--->S3			\ Start adding injected drug
+   #R6: Z6--->SX				\ Infusion pump is out of solution
+   #K2!#Z6: IF (Y(40)=0) OR (Y(29)>0) [@DONT,@INFUS]
+        @DONT: SET Y(29)=0; OFF^INFUSE--->SX
+        @INFUS: SET Y(3)=Q*1'; ON^INFUSE; IF A(31)=A(8) [@SAMER,@DIFFR]
+	@SAMER: SET Y(51)=1, Y(24)=Y(24)+1--->S6	\the catheter has been filled
+    	@DIFFR: IF Y(24)=0 [@FIRST,@REPET]
+	    @FIRST: SET Y(51)=Y(38)/Y(40)/Y(42)/Y(44)*1000", Y(24)=1--->S6	\ fill the catheter
+	    @REPET: SET Y(51)=0.1, Y(24)=Y(24)+1--->S6
+   #K18:--->S5
+S3, 	\ Correction for pump activation delay
+   1#T: --->S4
+S4, \ Start adding the SA drug 1 into the central compartment
+   0.01": SET Y(18)=Y(18)+U(9)/100; IF Y(18)>U(16) [SET U(16)=Y(18)]--->SX
+   #Z2: IF S.S.1=2 [@START,@CONT]
+	@START:--->S1
+	@CONT:--->S2
+   #R6: Z6--->SX				\ Infusion pump is out of solution
+   #K18:--->S5
+S5,  \Suspension state: waiting for a signal to end suspension
+   #K10!#K14!#K15!#K39!#Z11!#Z16!#Z32:--->S2	\ End suspension
+S6,	\ Delay adding of the infused drug by the time required to fill the catheter
+   Y(51)#T: SET Y(2)=0 , A(26)=Y(40)*Y(42)*Y(44)/1000, U(10)=A(26)*A(29)/W; IF A(30)=A(7) [@SAMED,@DIFFD]
+	@SAMED: SET Y(25)=Y(10), Y(26)=Y(11),Y(27)=Y(12), Y(28)=Y(13)--->S2 \ same drug
+	@DIFFD: --->S2 		\ self-administered and infused drugs are different
+   #K18: SHOW 53,InfusRATE,0; OFF^INFUSE --->S5			\ Start suspension
+   #START!#K12!#R7!#K17!#K32!#K38: IF S.S.2=8--->S5		\ Start suspension
+\
+S.S.17,	\ SESSION TIME
+S1,	\ Set some variables after loading the box from the keyboard
+   0.01": SET T(X)=DATETODAY, A(4)=DATETODAY, V(0)=Q*6000, V(1)=V(0), V(10)=V(0),  V(9)=V(0), V(11)=V(0); ADD X--->S2
+S2, 	\ Set other variables after starting the experiment from the keyboard
+   #K10!#K11!#START!#K12!#R7!#K13!#K14!#K15!#K16!#K17: SET T(X)=SECSTODAY, A(14)=SECSTODAY, E(X)=1, Y(52)=A(15)-T(X); ADD X; ON^BOX--->S3
+   #K20!#K21!#K22!#K23!#K24!#K25!#R7: SET T(X)=SECSTODAY, A(14)=SECSTODAY, E(X)=1, Y(52)=A(15)-T(X); ADD X; ON^BOX--->S3
+S3,
+   0.1": ADD Y(0),Y(1), Y(2), Y(4)--->SX		\ Time ticks with 0.1 sec accuracy
+   #K1: IF (S.S.3=2) [Z1;Z7]--->SX		\ Give an injection of not TIME-OUT
+   #K3: IF (S.S.3=2) [Z10;Z7]--->SX 		\ Give a pellet if not TIME-OUT
+   #K4: IF (S.S.3=2) [Z10;Z7]--->SX		\ Give a drop if not TIME-OUT
+   #K7: IF (S.S.3=2) [Z4;Z7]--->SX		\ Give a signal if not TIME-OUT
+   #K31: IF (S.S.3=2) [Z1;Z4;Z7]--->SX	\ Give an injection and a signal
+   #K42: SET A(25)=Y(39)*Y(41)*Y(43)/1000--->SX	\ Change the rate of injection
+   #K18!#K77: SET K(Y(54))=Y(0)+0.19; ADD Y(54); SET T(X)=-987.987, E(X)=-987.987, C(X)=-987.987, B(X)=-987.987, D(X)=-987.987; PRINT; FLUSH--->SX
+   #K50: SET A(52)=R(0)+R(1)+R(4)+R(5), A(58)=R(30)+R(31)+R(34)+R(35), A(43)=V(2), A(46)=U(16), A(47)=U(12), A(49)=V(17); IF A(57)=0[@FIXED,@PROGR]
+	@FIXED: SET A(57)=F--->S4
+	@PROGR: --->S4
+   #K99: CLEAR 1,60--->STOPKILL
+S4,
+   1": SET E(X)=99999997, T(X)=Y(0)/10, C(X)=Y(18), B(X)=Y(19), D(X)=Y(20), Q=Y(0)/600, A(18)=A(14)+T(X); ADD X; SET T(X)= DATETODAY, E(X)=99999998; ADD X; SET T(X)= SECSTODAY, E(X)=99999999; ADD X; SET Z(3)=X, Z(5)=X, Z(20)=X, W=A(6), T(X)=-987.987, C(X)=-987.987, E(X)=-987.987, B(X)=-987.987, D(X)=-987.987, Y(10)=0.69315/Y(10), Y(11)=0.69315/Y(11), Y(12)=0.69315/Y(12), Y(13)=0.69315/Y(13), Y(14)=0.69315/Y(14), Y(15)=0.69315/Y(15), Y(16)=0.69315/Y(16), Y(22)=0.69315/Y(22), Y(23)=0.69315/Y(23), Y(24)=0.69315/Y(24), Y(25)=0.69315/Y(25), Y(26)=0.69315/Y(26), Y(27)=0.69315/Y(27), Y(28)=0.69315/Y(28); CLEAR 1,60; PRINT--->STOPABORTFLUSH
+\************************************************************************************
+\                                                      SAVE EVERY EVENT
+\************************************************************************************
+S.S.18,	\ LEVER AND KEYBOARD PRESSES CONTROLLING OUTPUTS (BEHAVIOR, 1-9)
+S1,	\ Experimental design
+   #K10: IF Q=1440 [@TRAIN,@TEST]
+                     @TRAIN: SET A(50)=10000000--->S2
+                     @TEST: SET A(50)=20000000--->S2
+   #K11: SET A(50)=30000000--->S2		\ training with light and sound
+   #START!#K12!#R7: SET A(50)=40004000--->S2		\ training with lights only
+   #K13: SET A(50)=40000000--->S2		\
+   #K14: SET A(50)=50000000--->S2		\ single dose priming, loading and maintenance
+   #K15: SET A(50)=50000000--->S2		\ maintenance of IVSA
+   #K16: SET A(50)=70000000--->S2		\ no self-administration
+   #K17: SET A(50)=60000000--->S2		\ no self-administration but incontingent administration
+   #K20: SET A(50)=20000010--->S2		\ food training
+   #K21: SET A(50)=20000010--->S2		\ food loading
+   #K22: SET A(50)=50000010--->S2		\ maintenance with food and IVSA
+   #K23: SET A(50)=50000010--->S2		\ maintenance with food and ICSA
+   #K24: SET A(50)=50000010--->S2		\ maintenance of ICSA
+   #K25: SET A(50)=20000010--->S2		\ maintenance of ICSA
+S2,	\ Event codes
+   #R1: SET E(X)=E(X)+1; Z18; IF Y(0)<V(0) [SET V(0)=Y(0)/10]--->SX \ Active input 1 (active press)
+   #R2: SET E(X)=E(X)+2; Z18; IF Y(0)<V(1) [SET V(1)=Y(0)/10]--->SX \ Inactive input 2 (inact. press)
+   #R3: SET E(X)=E(X)+3; Z18; IF Y(0)<V(0) [SET V(0)=Y(0)/10]--->SX \ Active input 3 (active poke)
+   #R4: SET E(X)=E(X)+4; Z18; IF Y(0)<V(1) [SET V(1)=Y(0)/10]--->SX \ Inactive input 4 (inact. poke)
+   #Z7: SET E(X)=E(X)+5; Z18--->SX	\ Output activated by K signal from the keyboard
+   #Z8: SET E(X)=E(X)+6; Z18--->SX	\ Output activated by the program
+   #K2: SET A(50)=A(50)+60000000; IF (S.S.15=2) [@OFF,@ON]\ Infusion
+          @OFF: SET E(X)=E(X)+87; Z18--->SX		\ Infusion OFF
+          @ON: SET E(X)=E(X)+77; Z18--->SX		\ Infusion ON
+   #K42: SHOW 53,InfusRATE,U(10)--->SX
+   #K9!#K39: SET E(X)=E(X)+9; Z18--->SX  	\ Keyboard button press to mark an injection (iv, ip, sc)
+\
+S.S.19,	\ PUMP, FEEDER and WATER (REINFORCERS, 10-90)
+S1,
+   #Z1: SET E(X)=E(X)+10--->SX 			\ Injection and Time Out ON
+   #K9: IF A(8)=A(10) [SET E(X)=E(X)+10]--->SX	\ Injection and Time Out ON
+   #Z2: SET E(X)=E(X)+20; Z18--->SX		\ Injection OFF
+   #Z3: Z18--->SX				\ Time Out OFF
+   #Z6: SET A(50)=A(50)+60000000; IF (S.S.15=2) [@OFF,@ON]\ Infusion
+          @OFF: SET E(X)=E(X)+88; Z18--->SX		\ Infusion OFF
+          @ON: SET E(X)=E(X)+78; Z18--->SX		\ InfusionON
+   #Z10: SET E(X)=E(X)+30--->SX 			\ Feeder and Time Out ON
+   #Z20: SET E(X)=E(X)+90--->SX			\ Suicidal attempt
+\
+S.S.20,	\ LIGHTS AND SOUND (SIGNALS, 100-900)
+S1,
+   #K10!#K11!#START!#K12!#R7!#K13!#K14!#K15!#K16!#K17:--->S2
+   #K20!#K21!#K22!#K23!#K24!#K25!#R7:--->S2
+S2,
+   #Z4: SET E(X)=E(X)+100--->SX			\ Signal ON (day time)
+   #Z5: SET E(X)=E(X)+200; Z18--->SX		\ Signal OFF (day time)
+   1': IF (Y(0)>=Y(52)*10) [@OFF,@WAIT]
+           @OFF: OFF^HOUSE; SET E(X)=E(X)+700, Y(52)=Y(52)+A(17); Z18--->S3 \ House light OFF
+           @WAIT:--->SX
+S3,
+   #Z4: SET E(X)=E(X)+300--->SX			\ Signal ON (dark time)
+   #Z5: SET E(X)=E(X)+400; Z18--->SX		\ Signal OFF (dark time)
+   1': IF (Y(0)>=Y(52)*10) [@ON,@WAIT]
+           @ON: ON^HOUSE; SET E(X)=E(X)+800, Y(52)=Y(52)+A(16); Z18--->S2   \ House light ON
+           @WAIT:--->SX
+\
+S.S.21,		\ SCHEDULES
+S1, 				\ RATIO
+   #Z18: IF F=1 [@GO,@NO]
+              @GO: SET E(X)=E(X)+0000--->S1		\ Fixed Ratio schedule FR=1
+              @NO: IF (S.S.11=1) AND (S.S.3=2) [@GO,@NO]
+                 @GO: SET E(X)=E(X)+1000--->S1		\ Fixed ratio schedule - OFF
+                 @NO: IF (S.S.11=1) AND NOT (S.S.3=2) [@GO,@NO]
+                    @GO: SET E(X)=E(X)+2000--->S1		\ Fixed ratio schedule - ON
+                    @NO: IF (S.S.11=2) AND (S.S.3=2) [@GO,@NO]
+	     @GO: SET E(X)=E(X)+3000--->S1		\ Progressive ratio schedule - OFF
+	     @NO: IF (S.S.11=2) AND NOT (S.S.3=2)  [@GO,@NO]
+                          @GO: SET E(X)=E(X)+4000--->S1		\ Progressive ratio schedule - ON
+	        @NO: IF (S.S.11=3) AND (S.S.3=2)  [@GO,@NO]
+	           @GO: SET E(X)=E(X)+5000--->S1	\ Random ratio schedule - OFF
+	           @NO: IF (S.S.11=3) AND NOT (S.S.3=2)  [@GO,@NO]
+	              @GO: SET E(X)=E(X)+6000--->S1	\ Random ratio schedule - ON
+	              @NO: IF (S.S.11=4) AND (S.S.3=2)  [@GO,@NO]
+	                 @GO: SET E(X)=E(X)+7000--->S1	\ Proportional ratio schedule – OFF
+                                   @NO: SET E(X)=E(X)+8000--->S1	\ Proportional ratio schedule - ON 
+S2, 				\ TIME_OUT
+    0.01": IF (A(33)=0) AND (S.S.3=2) [@GO,@NO]
+         @GO: SET E(X)=E(X)+00000--->S1		\ Fixed TO - ON
+         @NO: IF (A(33)=0) AND NOT (S.S.3=2) [@GO,@NO]
+              @GO: SET E(X)=E(X)+10000--->S1		\ Fixed TO - OUT
+              @NO: IF (S.S.12=1) AND (S.S.3=2) [@GO,@NO]
+                   @GO: SET E(X)=E(X)+20000--->S1		\ TO during injection - ON
+                   @NO: IF (S.S.12=1) AND NOT (S.S.3=2) [@GO,@NO]
+                        @GO: SET E(X)=E(X)+30000--->S1		\ TO during injection - OUT
+                        @NO: IF (S.S.12=4) AND (S.S.3=2) [@GO,@NO]
+                             @GO: SET E(X)=E(X)+40000--->S1	\ Proportion to dose TO - ON
+                             @NO: IF (S.S.12=4) AND NOT (S.S.3=2) [@GO,@NO]
+                                  @GO: SET E(X)=E(X)+50000--->S1	\ Proportion to dose TO - OUT
+                                  @NO: IF (S.S.12=2) AND (S.S.3=2) [@GO,@NO]
+                                       @GO: SET E(X)=E(X)+60000--->S1	\ Progressive TO - ON
+                                       @NO: IF (S.S.12=2) AND NOT (S.S.3=2) [@GO,@NO]
+                                           @GO: SET E(X)=E(X)+70000--->S1	\ Progressive TO - OUT
+                                           @NO: IF (S.S.12=3) AND (S.S.3=2) [@GO,@NO]
+                                               @GO: SET E(X)=E(X)+80000--->S1	\ Random TO – ON
+                                               @NO: SET E(X)=E(X)+90000--->S1	\ Random TO – OUT
+\
+S.S.22,
+S1, 				\ INTERVAL
+   #Z18: IF Y(3)>=Q*60 [@GO,@NO]
+              @GO: SET E(X)=E(X)+000000--->S2		\ No scheduled intervals
+              @NO: IF (S.S.13=1) [@GO,@NO]
+                 @GO: SET E(X)=E(X)+100000--->S2		\ Fixed interval schedule
+                 @NO: IF (S.S.13=2) [@GO,@NO]
+                    @GO: SET E(X)=E(X)+200000--->S2		\ Progressive interval schedule
+                    @NO: IF (S.S.13=3) [@GO,@NO]
+                       @GO: SET E(X)=E(X)+300000--->S2	\ Random interval schedule
+                       @NO: IF (S.S.13=4) [@GO,@NO]
+                          @GO: SET E(X)=E(X)+400000--->S2	\ Proportional interval schedule
+                          @NO:--->S2
+S2, 				\ DOSING
+   0.01": IF (S.S.7=2) OR (S.S.7=3) OR (S.S.7=4) [@GO,@NO]
+              @GO: SET E(X)=E(X)+0000000--->S1		\ No real injections (filling dead space)
+              @NO: IF (S.S.14=1) AND (S.S.2=2) [@GO,@NO]
+                 @GO: SET E(X)=E(X)+1000000--->S1		\ Fixed dose schedule - OFF
+                 @NO: IF (S.S.14=1) AND NOT (S.S.2=2) [@GO,@NO]
+                    @GO: SET E(X)=E(X)+2000000--->S1		\ Fixed dose schedule - ON
+                    @NO: IF (S.S.14=2) AND (S.S.2=2) [@GO,@NO]
+                       @GO: SET E(X)=E(X)+3000000--->S1	\ Progressive dose schedule - OFF
+                       @NO: IF (S.S.14=2) AND NOT (S.S.2=2)  [@GO,@NO]
+                          @GO: SET E(X)=E(X)+4000000--->S1	\ Progressive dose schedule - ON
+                          @NO: IF (S.S.14=3) AND (S.S.2=2)  [@GO,@NO]
+                             @GO: SET E(X)=E(X)+5000000--->S1	\ Random dose schedule - OFF
+                             @NO: SET E(X)=E(X)+6000000--->S1	\ Random dose schedule - ON
+\
+S.S.23,				\ STAGES
+S1,
+   #Z18: IF (S.S.1=3) OR (S.S.1=4) [@GO,@NO]
+             @GO: SET E(X)=E(X)+10000000--->S2			\ Extinction-I
+             @NO: IF (S.S.1=2) OR (S.S.1=5) OR (S.S.1=6) OR (S.S.1=9) [@GO,@NO]
+                @GO: SET E(X)=E(X)+20000000--->S2			\ Transition
+                @NO: IF ((S.S.1=7) OR (S.S.1=8)) AND ((S.S.8=3) OR (S.S.8=4)) [@GO,@NO]
+                    @GO: SET E(X)=E(X)+30000000--->S2		\ Priming
+                    @NO: IF ((S.S.1=7) OR (S.S.1=8)) AND (A(54)>0) OR(S.S.8=6) OR(S.S.8=7) [@GO,@NO]
+                        @GO: SET E(X)=E(X)+40000000--->S2		\ Loading I
+                        @NO: IF ((S.S.1=7) OR (S.S.1=12)) AND (S.S.8=8) [@GO,@NO]
+                             @GO: SET E(X)=E(X)+50000000--->S2		\ Loading II
+                             @NO: IF (S.S.1=10) [@GO,@NO]
+                                  @GO: IF (Y(55)=0) OR (Y(55)=1) [@MI,@MM]
+                                       @MI: SET E(X)=E(X)+60000000--->S2		\ Maintenance-I
+                                       @MM: IF Y(55)=2 [@MII,@MIII]
+                                            @MII: SET E(X)=E(X)+70000000--->S2	\ Maintenance-II
+                                            @MIII: SET E(X)=E(X)+80000000--->S2	\ Maintenance-III
+	                @NO: IF (S.S.1=13) OR (S.S.1=14) OR (S.S.1=15) [@GO,@NO]
+                                                 @GO: SET E(X)=E(X)+90000000--->S2	\ Extinction-II
+                                                 @NO:--->S2
+   #K18: SET T(X)=Y(0)/10, C(X)=Y(18), B(X)=Y(19), D(X)=Y(20); ADD X--->SX \ Stop all stages
+S2,
+   0.01": SET T(X)=Y(0)/10, C(X)=Y(18), B(X)=Y(19), D(X)=Y(20); SHOW 58,Event CODE,E(X)-Y(59)*10000000; ADD X--->S1	\ End of the event
+\
+S.S.24,				\ DESIGN
+S1,
+   #Z21: IF S.S.1=3 [@SHAM,@MAINT]
+	@SHAM: SET A(50)=A(50)+60000--->SX 	\ Progressive ratio SHAM
+	@MAINT: SET A(50)=A(50)+60--->SX	 	\ Progressive ratio MAINT
+   #Z22: IF S.S.1=3 [@SHAM,@MAINT]
+	@SHAM: SET A(50)=A(50)+70000--->SX 	\ Random ratio SHAM
+	@MAINT: SET A(50)=A(50)+70--->SX	 	\ Random ratio MAINT
+\   #Z23: SET A(50)=A(50)+0--->SX			\ Proportional ratio
+   #Z24: IF S.S.1=3 [@SHAM,@MAINT]
+	@SHAM: SET A(50)=A(50)+00000--->SX 	\ Progressive time out SHAM
+	@MAINT: SET A(50)=A(50)+80--->SX	 	\ Progressive time out MAINT
+   #Z25: IF S.S.1=3 [@SHAM,@MAINT]
+	@SHAM: SET A(50)=A(50)+00000--->SX 	\ Random time out SHAM
+	@MAINT: SET A(50)=A(50)+90--->SX	 	\ Random time out MAINT
+\   #Z26: SET A(50)=A(50)+0--->SX			\ Proportional time out
+   #Z27: IF S.S.1=3 [@SHAM,@MAINT]
+	@SHAM: SET A(50)=A(50)+80000--->SX 	\ Progressive interval SHAM
+	@MAINT: SET A(50)=A(50)+00--->SX	 	\ Progressive interval MAINT
+   #Z28: IF S.S.1=3 [@SHAM,@MAINT]
+	@SHAM: SET A(50)=A(50)+90000--->SX 	\ Random interval SHAM
+	@MAINT: SET A(50)=A(50)+00--->SX	 	\ Random interval MAINT
+\   #Z29: SET A(50)=A(50)+0--->SX			\ Proportional interval
+\   #Z30: IF S.S.1=3 [@SHAM,@MAINT]
+\	@SHAM: SET A(50)=A(50)+00000--->SX 	\ Progressive dose SHAM
+\	@MAINT: SET A(50)=A(50)+00--->SX	 	\ Progressive dose MAINT
+   #Z31: IF S.S.1=3 [@SHAM,@MAINT]
+	@SHAM: SET A(50)=A(50)+50000--->SX 	\ Random dose SHAM
+	@MAINT: SET A(50)=A(50)+50--->SX	 	\ Random dose MAINT
+\*************************************************************************************
+\			SESSION  SUMMARY
+\*************************************************************************************
+S.S.25,	\ SHOW TIME AND VARIABLES
+S1,
+   1": SHOW 1,Session TIME,Y(0)/600, 2,Time AFTER,Y(1)/10, 3,CONC,Y(18), 6,SESION,Q, 7,INTERVAL,Y(3), 8,Next DOSE,Y(5), 18,CUM_D,U(15), 19,FR,F, 46,Central 1,Y(18),  47,Brain 1,Y(19), 48,Periph 1,Y(20),  49,TOTAL 1,Y(21), 51,Central 2,Y(30), 52,Brain 2,Y(31), 53,Periph 2,Y(32), 54,TOTAL 2,Y(33); IF X>=Z(26) [@FLUSH,@CONT]
+         @FLUSH: FLUSH--->S2
+         @CONT:--->SX
+   #K1: SET K(Y(54))=1; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K2: SET K(Y(54))=2; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K3: SET K(Y(54))=3; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K4: SET K(Y(54))=4; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K5: SET K(Y(54))=5; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K6: SET K(Y(54))=6; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K7: SET K(Y(54))=7; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K8: SET K(Y(54))=8; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K9: SET K(Y(54))=9; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K10: SET K(Y(54))=10; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K11: SET K(Y(54))=11; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #START!#K12!#R7: SET K(Y(54))=12; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K13: SET K(Y(54))=13; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K14: SET K(Y(54))=14; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K15: SET K(Y(54))=15; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K16: SET K(Y(54))=16; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K17: SET K(Y(54))=17; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K18: SET K(Y(54))=18; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K19: SET K(Y(54))=19; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K20: SET K(Y(54))=20; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K21: SET K(Y(54))=21; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K22: SET K(Y(54))=22; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K23: SET K(Y(54))=23; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K24: SET K(Y(54))=24; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K25: SET K(Y(54))=25; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K31: SET K(Y(54))=31; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K32: IF S.S.2=8 [SET K(Y(54))=32; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)]--->SX
+   #K38: IF S.S.2=8 [SET K(Y(54))=38; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)]--->SX
+   #K39: IF S.S.2=8 [SET K(Y(54))=39; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)]--->SX
+   #K41: SET K(Y(54))=41; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K42: SET K(Y(54))=42; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+   #K50: SET K(Y(54))=50; ADD Y(54); SET K(Y(54))=Y(0); ADD Y(54)--->SX
+S2,
+   2": SET X=0; ZEROARRAY B, C, D, E, T--->S1
+\
+S.S.26,	\ SHOW THIS PUMPING
+S1,
+   #Z1: SET Y(46)=0; SHOW 16,PUMP,L/1"; IF U(17)<Y(5) [@GO,@NO]
+                @GO: SET U(17)=Y(5)--->S2
+                @NO:--->S2
+   #R1!#R3: SHOW 14,TOWARD,Y(6)--->SX
+S2,
+   0.01": ADD Y(46),Y(49); SHOW 11,Pumping TIME,Y(46)/1", 13,C_DOSE,Y(5)--->SX
+   #Z2: SHOW 14,Toward FR,Y(6)--->S1
+\
+S.S.27,	\ SHOW THIS TIME OUT
+S1,
+   #Z1: SET Y(47)=0; SHOW 17,T_OUT,M/1"; IF (S.S.31=2) and (U(13)<Y(5)) [@GO,@NO]
+	@GO: SET U(13)=Y(5)--->S2
+	@NO:--->S2
+   #Z12: SET Y(47)=0, Y(51)=2*A(39); SHOW 17,T_OUT,Y(51)--->S3
+S2,
+   0.01": ADD Y(47), Y(50); SHOW 12,TIME_OUT,Y(47)/1"--->SX
+   #Z3:--->S1
+S3,	\ show an expected duration of the transition stage
+   1": ADD Y(45); SHOW 12,TIME_OUT,Y(45)--->SX
+   #R1!#R2!#R3!#R4: SHOW 17,T_OUT,Y(51)--->SX
+   #Z14:--->S1
+\
+S.S.28,	\ SHOW EXTINCTION-I
+S1,
+   #Z11: SET Y(59)=1; SHOW 5,Phase: EXT_I,1, 10,EXT_Criterion,A(43)--->S2
+S2,
+     1": SHOW 4,Time Left,A(43)-Y(4)/600, 14,TOWARD,Y(4)/600;
+	IF V(2)<Y(4)/600 [SET V(2)=Y(4)/600]--->SX
+   #R1: SET V(3)=Y(0)/10, Y(4)=0; IF (S.S.3=2) [@AON,@AOF]
+          @AON: ADD R(0); SHOW 4,A1ON_I,R(0), 21,AON_I,R(0)+R(4)--->SX
+          @AOF: ADD R(1); SHOW 4,A1OF_I,R(1), 22,AOF_I,R(1)+R(5)---> SX
+   #R2:  SET V(4)=Y(0)/10, Y(4)=0; IF (S.S.3=2) [@ION,@IOF]
+          @ION: ADD R(2); SHOW 3,I2ON_I,R(2), 23,ION_I,R(2)+R(6)--->SX
+          @IOF: ADD R(3); SHOW 3,I2OF_I,R(3), 24,IOF_I,R(3)+R(7)--->SX
+   #R3: SET V(3)=Y(0)/10, Y(4)=0; IF (S.S.3=2) [@AON,@AOF]
+          @AON: ADD R(4); SHOW 4,A3ON_I,R(4), 21,AON_I,R(0)+R(4)--->SX
+          @AOF: ADD R(5); SHOW 4,A3OF_I,R(5), 22,AOF_I,R(1)+R(5)--->SX
+   #R4: SET V(4)=Y(0)/10, Y(4)=0; IF (S.S.3=2) [@ION,@IOF]
+          @ION: ADD R(6); SHOW 3,I4ON_I,R(6), 23,ION_I,R(2)+R(6)--->SX
+          @IOF: ADD R(7); SHOW 3,I4OF_I,R(7), 24,IOF_I,R(3)+R(7)--->SX
+   #Z9: ADD S(0); SHOW 25,EARN_I,S(0); IF Y(0)/10<V(10) [SET V(10)=Y(0)/10]--->SX
+   #Z8: ADD S(1); SHOW 9,PROG_I,S(1), 4,SHAM,S(2)--->SX
+   #K1: ADD S(3); SHOW 4,K1SHAM,S(3)--->SX
+   #Z19!#K18: SET U(15)=0; SHOW 10,SHAM,S(1)--->S1
+\
+S.S.29,	\ SHOW TRANSITION
+S1,
+   #K13: IF S.S.1=6 [SET Y(59)=2; SHOW 4,K13,1, 5,TRANS,2, 9,Z12,1]--->S2
+   #Z12: SET Y(59)=2; SHOW 4,Z12,1, 5,TRANS,2, 9,Z12,1--->S2
+S2,
+   #R1!#R3: ADD R(8),S(8); SHOW 4,RTRANS,R(8), 27,AOF_T,R(8), 30,PRES_T,R(8)+R(9)--->SX
+   #R2!#R4: ADD R(9); SHOW 3,LTRANS,R(9), 29,IOF_T,R(9), 30,PRES_T,R(8)+R(9)--->SX
+   #Z1: ADD S(9); SHOW 4,FILL,S(9),9,FILL,S(9)--->SX
+   #Z14!#K18: SET U(15)=0--->S1
+\
+S.S.30,	\ SHOW REINSTATEMENT
+S1,
+   #Z14: SET Y(59)=3; SHOW 9,KZ14,1, 5,Phase: REINST,3, 15,INI_CR,A(44)--->S2
+   #K20!#K21: IF S.S.1=7 [SET Y(59)=3; SHOW 5,FOOD,3]--->S2
+S2,	\ Measure reinstatement parameters after the ultimate priming injection
+   #R1: IF (S.S.3=2) [@AON,@AOF]
+          @AON: ADD R(10); SHOW31,AON_R,R(10)+R(14); IF Y(0)/10<V(9) [SET V(9)=Y(0)/10]--->SX
+          @AOF: ADD R(11); SHOW32,AOF_R,R(11)+R(15); IF Y(0)/10<V(9) [SET V(9)=Y(0)/10]--->SX
+   #R2: IF (S.S.3=2) [@ION,@IOF]
+          @ION: ADD R(12); SHOW 33,ION_R,R(12)+R(16)--->SX
+          @IOF: ADD R(13); SHOW 34,IOF_R,R(13)+R(17)--->SX
+   #R3: IF (S.S.3=2) [@AON,@AOF]
+          @AON: ADD R(14); SHOW31,AON_R,R(10)+R(14); IF Y(0)/10<V(9) [SET V(9)=Y(0)/10]--->SX
+          @AOF: ADD R(15); SHOW32,AOF_R,R(11)+R(15); IF Y(0)/10<V(9) [SET V(9)=Y(0)/10]--->SX
+   #R4: IF (S.S.3=2) [@ION,@IOF]
+          @ION: ADD R(16); SHOW 33,ION_R,R(12)+R(16)--->SX
+          @IOF: ADD R(17); SHOW 34,IOF_R,R(13)+R(17)--->SX
+   #Z7: SET Y(7)=0; ADD S(12); SHOW 4,K1-7,S(12)--->SX
+   #Z8: ADD S(11); SHOW 9,PROG_R,S(11), 4,PROG_R,S(11), 15,INI_CR,A(44);
+	IF (S.S.1=6) OR (S.S.1=10) [SET Y(7)=0]--->SX
+   #Z9: ADD S(10); SHOW 35,EARN_R,S(10), 4,THIS_D,Y(7); 
+	IF Y(0)/10<V(11) [SET V(11)=Y(0)/10]--->SX
+   #Z20: ADD S(13); SHOW 4,SUICID,S(13)--->SX
+   #Z19!#K18: SET U(6)=U(15); SHOW 15,PR_THR,A(54)--->S1
+\
+S.S.31,	\ SHOW MAINTENANCE
+S1,
+   #Z15: SET U(12)=A(46), Y(59)=6; SHOW 5,Phase: MAINT,Y(59)--->S2
+S2,
+   #R1: IF (S.S.3=2) [@AON,@AOF]
+          @AON: ADD R(20); SHOW 36,AON_M,R(20)+R(24); IF Y(18)<U(12) [SET U(12)=Y(18)]--->SX
+          @AOF: ADD R(21); SHOW 37,AOF_M,R(21)+R(25); IF Y(18)>U(14) [SET U(14)=Y(18)]--->SX
+   #R2: IF (S.S.3=2) [@ION,@IOF]
+          @ION: ADD R(22); SHOW 38,ION_M,R(22)+R(26); IF Y(18)<U(12) [SET U(12)=Y(18)]--->SX
+          @IOF: ADD R(23); SHOW 39,IOF_M,R(23)+R(27); IF Y(18)<U(12) [SET U(12)=Y(18)]--->SX
+   #R3: IF (S.S.3=2) [@AON,@AOF]
+          @AON: ADD R(24); SHOW 36,AON_M,R(20)+R(24); IF Y(18)<U(12) [SET U(12)=Y(18)]--->SX
+          @AOF: ADD R(25); SHOW 37,AOF_M,R(21)+R(25); IF Y(18)>U(14) [SET U(14)=Y(18)]--->SX
+   #R4: IF (S.S.3=2) [@ION,@IOF]
+          @ION: ADD R(26); SHOW 38,ION_M,R(22)+R(26); IF Y(18)<U(12) [SET U(12)=Y(18)]--->SX
+          @IOF: ADD R(27); SHOW 39,IOF_M,R(23)+R(27); IF Y(18)<U(12) [SET U(12)=Y(18)]--->SX
+   #Z7: ADD S(22); SHOW 4,K1-7,S(22)--->SX
+   #Z8: ADD S(21); SHOW 9,PROG_M,S(21), 4,PROG_M,S(21)--->SX
+   #Z9: ADD S(20); SHOW 40,EARN_M,S(20), 4,THIS_D,Y(7);
+	IF Y(0)/10<V(11) [SET V(11)=Y(0)/10]--->SX
+   #Z20: ADD S(23); SHOW 4,SUICID,S(23); IF Y(18)>U(14) [SET U(14)=Y(18)]--->SX
+   #Z19!#K18: SET U(11)=U(15)-U(6)--->S1
+\
+S.S.32,	\ SHOW EXTINCTION-II
+S1,
+   #Z16: SET Y(4)=0, Y(59)=9; SHOW 5,Phase: EXT_II,9,20,EXT_CR,A(49)--->S2
+S2,
+   1": IF V(17)<Y(4)/10 [SET V(17)=Y(4)/10]--->SX
+   #R1: SET V(18)=Y(0)/10, Y(4)=0; IF (S.S.3=2) [@AON,@AOF]
+          @AON: ADD R(30); SHOW 41,AON_E,R(30)+R(34);
+	IF Y(0)/10<V(15) [SET V(15)=Y(0)/10]--->SX
+          @AOF: ADD R(31); SHOW 42,AOF_E,R(31)+R(35);
+	IF Y(0)/10<V(15) [SET V(15)=Y(0)/10]--->SX
+   #R2: SET V(19)=Y(0)/10, Y(4)=0; IF (S.S.3=2) [@ION,@IOF]
+          @ION: ADD R(32); SHOW 43,ION_E,R(32)+R(36);
+	IF Y(0)/10<V(16) [SET V(16)=Y(0)/10]--->SX	
+          @IOF: ADD R(33); SHOW 44,IOF_E,R(33)+R(37);
+	IF Y(0)/10<V(16) [SET V(16)=Y(0)/10]--->SX
+   #R3: SET V(18)=Y(0)/10, Y(4)=0; IF (S.S.3=2) [@AON,@AOF]	
+          @AON: ADD R(34); SHOW 41,AON_E,R(30)+R(34);
+	IF Y(0)/10<V(15) [SET V(15)=Y(0)/10]--->SX
+          @AOF: ADD R(35); SHOW 42,AOF_E,R(31)+R(35);
+	IF Y(0)/10<V(15) [SET V(15)=Y(0)/10]--->SX
+   #R4: SET V(19)=Y(0)/10, Y(4)=0; IF (S.S.3=2) [@ION,@IOF]
+          @ION: ADD R(36); SHOW 43,ION_E,R(32)+R(36);
+	IF Y(0)/10<V(16) [SET V(16)=Y(0)/10]--->SX
+          @IOF: ADD R(37); SHOW 44,IOF_E,R(33)+R(37);
+	IF Y(0)/10<V(16) [SET V(16)=Y(0)/10]--->SX
+   #Z9:ADDS(30);SETU(19)=Y(18);SHOW4,EARNED,S(30),45,EARN_E,S(30),4,EX_THR,U(19)--->SX
+   #Z8: ADD S(31); SHOW 9,PROG_E,S(31)--->SX
+   #K1: ADD S(33); SHOW 4,SHAM,S(32)--->SX
+   #Z19!#K18: SHOW 20,EXT_THR,U(19)--->S1
